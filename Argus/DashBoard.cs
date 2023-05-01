@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Argus
 {
-    public partial class Form1 : Form
+    public partial class DashBoard : Form
     {
-        public Form1()
+        public DashBoard()
         {
             InitializeComponent();
         }
