@@ -21,6 +21,9 @@
         }
 
         #region Windows Form 디자이너에서 생성한 코드
+        private System.Windows.Forms.Label CpuL;
+        private System.Windows.Forms.Label MemL;
+        private System.Windows.Forms.Label DiskL;
 
         /// <summary>
         /// 디자이너 지원에 필요한 메서드입니다. 
