@@ -17,16 +17,7 @@ namespace Argus
         public DashBoard()
         {
             InitializeComponent();
-            //getSystemInfo();
-        }
-
-        public void getSystemInfo()
-        {
-            Usage U = new Usage();
-            CpuL.Text = "CPU: " + U.CpuUsage().ToString() + " %"; //cpu 사용량 출력
-            MemL.Text = "Memory: " + U.MemUsage().ToString() + " %"; //메모리 사용량 출력
-            DiskL.Text = "Disk: " + (U.DiskUsage()).ToString() + " GB"; //디스크 사용량 출력
-        }
+        }      
     }
 
     public class Usage
@@ -35,7 +26,7 @@ namespace Argus
         UInt64 Mem;
         double Disk = 0;
 
-        public UInt64 CpuUsage()
+        public UInt64 getCpuUsage()
         {
             ManagementObjectSearcher cpuusage_info = new ManagementObjectSearcher("select * from Win32_PerfFormattedData_PerfOS_Processor");
             foreach (ManagementObject wmi_CPUUSAGE in cpuusage_info.Get())
@@ -45,7 +36,7 @@ namespace Argus
             return Cpu;
         }
 
-        public UInt64 MemUsage()
+        public UInt64 getMemUsage()
         {
             ManagementObjectSearcher ram_usage = new ManagementObjectSearcher("select * from Win32_PerfFormattedData_PerfOS_Processor");
             foreach (ManagementObject wmi_RAMUSAGE in ram_usage.Get())
@@ -55,7 +46,7 @@ namespace Argus
             return Mem;
         }
 
-        public double DiskUsage()
+        public double getDiskUsage()
         {
             DriveInfo[] allDrives = DriveInfo.GetDrives();
             foreach (DriveInfo d in allDrives)
