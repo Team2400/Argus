@@ -28,74 +28,74 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
-            this.cartesianChart2 = new LiveCharts.WinForms.CartesianChart();
-            this.cartesianChart3 = new LiveCharts.WinForms.CartesianChart();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.cpuLabel = new System.Windows.Forms.Label();
+            this.cpuChart = new LiveCharts.WinForms.CartesianChart();
+            this.memoryChart = new LiveCharts.WinForms.CartesianChart();
+            this.diskChart = new LiveCharts.WinForms.CartesianChart();
+            this.memoryLabel = new System.Windows.Forms.Label();
+            this.diskLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // label1
+            // cpuLabel
             // 
-            this.label1.BackColor = System.Drawing.Color.Gray;
-            this.label1.Location = new System.Drawing.Point(26, 27);
-            this.label1.Name = "label1";
-            this.label1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.label1.Size = new System.Drawing.Size(955, 25);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "CPU USAGE";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.cpuLabel.BackColor = System.Drawing.Color.Gray;
+            this.cpuLabel.Location = new System.Drawing.Point(26, 27);
+            this.cpuLabel.Name = "cpuLabel";
+            this.cpuLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.cpuLabel.Size = new System.Drawing.Size(955, 25);
+            this.cpuLabel.TabIndex = 4;
+            this.cpuLabel.Text = "CPU USAGE";
+            this.cpuLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // cartesianChart1
+            // cpuChart
             // 
-            this.cartesianChart1.BackColor = System.Drawing.Color.Black;
-            this.cartesianChart1.ForeColor = System.Drawing.Color.Chocolate;
-            this.cartesianChart1.Location = new System.Drawing.Point(23, 55);
-            this.cartesianChart1.Name = "cartesianChart1";
-            this.cartesianChart1.Size = new System.Drawing.Size(960, 120);
-            this.cartesianChart1.TabIndex = 1;
-            this.cartesianChart1.Text = "cartesianChart1";
+            this.cpuChart.BackColor = System.Drawing.Color.Black;
+            this.cpuChart.ForeColor = System.Drawing.Color.Chocolate;
+            this.cpuChart.Location = new System.Drawing.Point(23, 55);
+            this.cpuChart.Name = "cpuChart";
+            this.cpuChart.Size = new System.Drawing.Size(960, 120);
+            this.cpuChart.TabIndex = 1;
+            this.cpuChart.Text = "cpuChart";
             // 
-            // cartesianChart2
+            // memoryChart
             // 
-            this.cartesianChart2.BackColor = System.Drawing.Color.Black;
-            this.cartesianChart2.ForeColor = System.Drawing.Color.Chocolate;
-            this.cartesianChart2.Location = new System.Drawing.Point(21, 225);
-            this.cartesianChart2.Name = "cartesianChart2";
-            this.cartesianChart2.Size = new System.Drawing.Size(960, 120);
-            this.cartesianChart2.TabIndex = 2;
-            this.cartesianChart2.Text = "cartesianChart2";
+            this.memoryChart.BackColor = System.Drawing.Color.Black;
+            this.memoryChart.ForeColor = System.Drawing.Color.Chocolate;
+            this.memoryChart.Location = new System.Drawing.Point(21, 225);
+            this.memoryChart.Name = "memoryChart";
+            this.memoryChart.Size = new System.Drawing.Size(960, 120);
+            this.memoryChart.TabIndex = 2;
+            this.memoryChart.Text = "memoryChart";
             // 
-            // cartesianChart3
+            // diskChart
             // 
-            this.cartesianChart3.BackColor = System.Drawing.Color.Black;
-            this.cartesianChart3.ForeColor = System.Drawing.Color.Chocolate;
-            this.cartesianChart3.Location = new System.Drawing.Point(21, 406);
-            this.cartesianChart3.Name = "cartesianChart3";
-            this.cartesianChart3.Size = new System.Drawing.Size(960, 120);
-            this.cartesianChart3.TabIndex = 3;
-            this.cartesianChart3.Text = "cartesianChart3";
+            this.diskChart.BackColor = System.Drawing.Color.Black;
+            this.diskChart.ForeColor = System.Drawing.Color.Chocolate;
+            this.diskChart.Location = new System.Drawing.Point(21, 406);
+            this.diskChart.Name = "diskChart";
+            this.diskChart.Size = new System.Drawing.Size(960, 120);
+            this.diskChart.TabIndex = 3;
+            this.diskChart.Text = "diskChart";
             // 
-            // label2
+            // memoryLabel
             // 
-            this.label2.BackColor = System.Drawing.Color.Gray;
-            this.label2.Location = new System.Drawing.Point(23, 197);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(960, 25);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "MEM USAGE";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.memoryLabel.BackColor = System.Drawing.Color.Gray;
+            this.memoryLabel.Location = new System.Drawing.Point(23, 197);
+            this.memoryLabel.Name = "memoryLabel";
+            this.memoryLabel.Size = new System.Drawing.Size(960, 25);
+            this.memoryLabel.TabIndex = 5;
+            this.memoryLabel.Text = "MEM USAGE";
+            this.memoryLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label3
+            // diskLabel
             // 
-            this.label3.BackColor = System.Drawing.Color.Gray;
-            this.label3.Location = new System.Drawing.Point(21, 380);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(960, 23);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "DISK USAGE";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.diskLabel.BackColor = System.Drawing.Color.Gray;
+            this.diskLabel.Location = new System.Drawing.Point(21, 380);
+            this.diskLabel.Name = "diskLabel";
+            this.diskLabel.Size = new System.Drawing.Size(960, 23);
+            this.diskLabel.TabIndex = 6;
+            this.diskLabel.Text = "DISK USAGE";
+            this.diskLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // DashBoard
             // 
@@ -103,27 +103,26 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DimGray;
             this.ClientSize = new System.Drawing.Size(1015, 610);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.cartesianChart3);
-            this.Controls.Add(this.cartesianChart2);
-            this.Controls.Add(this.cartesianChart1);
+            this.Controls.Add(this.cpuLabel);
+            this.Controls.Add(this.diskLabel);
+            this.Controls.Add(this.memoryLabel);
+            this.Controls.Add(this.diskChart);
+            this.Controls.Add(this.memoryChart);
+            this.Controls.Add(this.cpuChart);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "DashBoard";
             this.Text = "Argus";
-            this.Load += new System.EventHandler(this.DashBoard_Load);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private LiveCharts.WinForms.CartesianChart cartesianChart1;
-        private LiveCharts.WinForms.CartesianChart cartesianChart2;
-        private LiveCharts.WinForms.CartesianChart cartesianChart3;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
+        private LiveCharts.WinForms.CartesianChart cpuChart;
+        private LiveCharts.WinForms.CartesianChart memoryChart;
+        private LiveCharts.WinForms.CartesianChart diskChart;
+        private System.Windows.Forms.Label cpuLabel;
+        private System.Windows.Forms.Label memoryLabel;
+        private System.Windows.Forms.Label diskLabel;
     }
 }
 
