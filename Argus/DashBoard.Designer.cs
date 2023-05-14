@@ -39,10 +39,10 @@
             // cpuLabel
             // 
             this.cpuLabel.BackColor = System.Drawing.Color.Gray;
-            this.cpuLabel.Location = new System.Drawing.Point(26, 27);
+            this.cpuLabel.Location = new System.Drawing.Point(49, 25);
             this.cpuLabel.Name = "cpuLabel";
             this.cpuLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.cpuLabel.Size = new System.Drawing.Size(955, 25);
+            this.cpuLabel.Size = new System.Drawing.Size(975, 30);
             this.cpuLabel.TabIndex = 4;
             this.cpuLabel.Text = "CPU USAGE";
             this.cpuLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -51,9 +51,9 @@
             // 
             this.cpuChart.BackColor = System.Drawing.Color.Black;
             this.cpuChart.ForeColor = System.Drawing.Color.Chocolate;
-            this.cpuChart.Location = new System.Drawing.Point(23, 55);
+            this.cpuChart.Location = new System.Drawing.Point(49, 55);
             this.cpuChart.Name = "cpuChart";
-            this.cpuChart.Size = new System.Drawing.Size(960, 120);
+            this.cpuChart.Size = new System.Drawing.Size(975, 160);
             this.cpuChart.TabIndex = 1;
             this.cpuChart.Text = "cpuChart";
             // 
@@ -61,9 +61,9 @@
             // 
             this.memoryChart.BackColor = System.Drawing.Color.Black;
             this.memoryChart.ForeColor = System.Drawing.Color.Chocolate;
-            this.memoryChart.Location = new System.Drawing.Point(21, 225);
+            this.memoryChart.Location = new System.Drawing.Point(49, 265);
             this.memoryChart.Name = "memoryChart";
-            this.memoryChart.Size = new System.Drawing.Size(960, 120);
+            this.memoryChart.Size = new System.Drawing.Size(975, 160);
             this.memoryChart.TabIndex = 2;
             this.memoryChart.Text = "memoryChart";
             // 
@@ -71,18 +71,18 @@
             // 
             this.diskChart.BackColor = System.Drawing.Color.Black;
             this.diskChart.ForeColor = System.Drawing.Color.Chocolate;
-            this.diskChart.Location = new System.Drawing.Point(21, 406);
+            this.diskChart.Location = new System.Drawing.Point(49, 475);
             this.diskChart.Name = "diskChart";
-            this.diskChart.Size = new System.Drawing.Size(960, 120);
+            this.diskChart.Size = new System.Drawing.Size(975, 160);
             this.diskChart.TabIndex = 3;
             this.diskChart.Text = "diskChart";
             // 
             // memoryLabel
             // 
             this.memoryLabel.BackColor = System.Drawing.Color.Gray;
-            this.memoryLabel.Location = new System.Drawing.Point(23, 197);
+            this.memoryLabel.Location = new System.Drawing.Point(49, 235);
             this.memoryLabel.Name = "memoryLabel";
-            this.memoryLabel.Size = new System.Drawing.Size(960, 25);
+            this.memoryLabel.Size = new System.Drawing.Size(975, 30);
             this.memoryLabel.TabIndex = 5;
             this.memoryLabel.Text = "MEM USAGE";
             this.memoryLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -90,9 +90,9 @@
             // diskLabel
             // 
             this.diskLabel.BackColor = System.Drawing.Color.Gray;
-            this.diskLabel.Location = new System.Drawing.Point(21, 380);
+            this.diskLabel.Location = new System.Drawing.Point(49, 445);
             this.diskLabel.Name = "diskLabel";
-            this.diskLabel.Size = new System.Drawing.Size(960, 23);
+            this.diskLabel.Size = new System.Drawing.Size(975, 30);
             this.diskLabel.TabIndex = 6;
             this.diskLabel.Text = "DISK USAGE";
             this.diskLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -102,7 +102,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DimGray;
-            this.ClientSize = new System.Drawing.Size(1015, 610);
+            this.ClientSize = new System.Drawing.Size(1069, 655);
             this.Controls.Add(this.cpuLabel);
             this.Controls.Add(this.diskLabel);
             this.Controls.Add(this.memoryLabel);
