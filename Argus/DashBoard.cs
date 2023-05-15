@@ -73,12 +73,6 @@ namespace Argus
                 updateChart(chart, cValues);
             });
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            List<double> cValues = new List<double> { 6, 7, 3, 4, 6, 5, 3, 2, 6, 7, 8, 7, 5 };
-            updateChart(cpuChart, cValues);
-        }
     }
 
     public class Usage
