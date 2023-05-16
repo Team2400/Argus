@@ -102,7 +102,7 @@
             // 
             // DashBoard
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DimGray;
             this.ClientSize = new System.Drawing.Size(875, 518);
@@ -112,8 +112,10 @@
             this.Controls.Add(this.diskChart);
             this.Controls.Add(this.memoryChart);
             this.Controls.Add(this.cpuChart);
+
             this.Name = "DashBoard";
             this.Text = "Argus";
+            this.Load += new System.EventHandler(this.DashBoard_Load);
             this.ResumeLayout(false);
 
         }
