@@ -28,37 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.sadfasdfasdf = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // sadfasdfasdf
-            // 
-            this.sadfasdfasdf.AutoSize = true;
-            this.sadfasdfasdf.Location = new System.Drawing.Point(599, 259);
-            this.sadfasdfasdf.Name = "sadfasdfasdf";
-            this.sadfasdfasdf.Size = new System.Drawing.Size(54, 18);
-            this.sadfasdfasdf.TabIndex = 0;
-            this.sadfasdfasdf.Text = "label1";
-            this.sadfasdfasdf.Click += new System.EventHandler(this.test_Click);
             // 
             // DashBoard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1143, 675);
-            this.Controls.Add(this.sadfasdfasdf);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "DashBoard";
             this.Text = "Argus";
             this.Load += new System.EventHandler(this.DashBoard_Load);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Label sadfasdfasdf;
     }
 }
 
