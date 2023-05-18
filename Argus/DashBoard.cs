@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
 
 using System.Management;
 using System.IO;
@@ -21,6 +22,7 @@ using Brushes = System.Windows.Media.Brushes;
 
 namespace Argus
 {
+    delegate void InsertDBData();
     public partial class DashBoard : Form
     {
         private static int ID = 0;
@@ -79,7 +81,7 @@ namespace Argus
             });
 
         }
-
+        private System.Windows.Forms.Timer timer;
         private void DashBoard_Load(object sender, EventArgs e)
         {
             try
@@ -92,6 +94,10 @@ namespace Argus
                 Console.WriteLine(ex.Message);
                 Console.WriteLine(ex.StackTrace);
             }
+            timer = new System.Windows.Forms.Timer();
+            timer.Interval = 5 * 60 * 1000; // 5분 (단위: 밀리초)
+            timer.Tick += Timer_Tick;
+            timer.Start();
         }
 
         public void insert_DB(int cUsage, int mUsage, int dUsage)//인자로 SystemUsage 3개를 받고 현재 시간과 함께 data삽입
@@ -99,7 +105,12 @@ namespace Argus
             var data = new SystemUsage { Timestamp = DateTime.Now, CPU = cUsage, Memory = mUsage, Disk = dUsage };
             collection.Insert(data);
         }
-        
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            Usage u = new Usage();
+            insert_DB(u.getCpuUsage(), (int)u.getMemUsage(), (int)u.getDiskUsage());
+        }
+
         private IEnumerable<SystemUsage> selectSysUsage(int limit)//limit는 가장 최근 data부터 얼만큼 값을 불러올 지에 대한 값
             //IEnumerable은 iter가 사용 가능한 자료구조로 만약 각 attribute에 대한 값을 불러오려면 무조건 foreach를 사용하여 접근해야한다. 이하는 그 예시이다.
             //var data = selectSysUsage(5); 최근 data로부터 5개 값을 불러온다

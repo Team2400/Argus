@@ -112,7 +112,6 @@
             this.Controls.Add(this.diskChart);
             this.Controls.Add(this.memoryChart);
             this.Controls.Add(this.cpuChart);
-
             this.Name = "DashBoard";
             this.Text = "Argus";
             this.Load += new System.EventHandler(this.DashBoard_Load);
