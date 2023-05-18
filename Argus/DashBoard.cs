@@ -28,7 +28,8 @@ namespace Argus
         private static int ID = 0;
         private LiteDatabase db;
         private ILiteCollection<SystemUsage> collection;
-        
+        public int TIME_INTERVAL = 5 * 1000;//5분단위 시간(밀리초)5 * 60 * 1000
+
         static void makeChart(LiveCharts.WinForms.CartesianChart someChart, List<string>labels)
         {
             someChart.AxisX.Add(new Axis
@@ -95,12 +96,12 @@ namespace Argus
                 Console.WriteLine(ex.StackTrace);
             }
             timer = new System.Windows.Forms.Timer();
-            timer.Interval = 5 * 60 * 1000; // 5분 (단위: 밀리초)
-            timer.Tick += Timer_Tick;
+            timer.Interval = TIME_INTERVAL;//Time Interval
+            timer.Tick += Timer_Tick;// 위 시간에 한번씩 Timer_Tick 호출
             timer.Start();
         }
 
-        public void insert_DB(int cUsage, int mUsage, int dUsage)//인자로 SystemUsage 3개를 받고 현재 시간과 함께 data삽입
+        public void insert_DB(double cUsage, double mUsage, double dUsage)//인자로 SystemUsage 3개를 받고 현재 시간과 함께 data삽입
         {
             var data = new SystemUsage { Timestamp = DateTime.Now, CPU = cUsage, Memory = mUsage, Disk = dUsage };
             collection.Insert(data);
@@ -108,7 +109,30 @@ namespace Argus
         private void Timer_Tick(object sender, EventArgs e)
         {
             Usage u = new Usage();
-            insert_DB(u.getCpuUsage(), (int)u.getMemUsage(), (int)u.getDiskUsage());
+            insert_DB(u.getCpuUsage(), (int)u.getMemUsage(), (int)u.getDiskUsage());//data insert at DB
+
+            List<double> cList = new List<double>();//CPU chart update를 위한 list 이하 동일함
+            List<double> mList = new List<double>();
+            List<double> dList = new List<double>();
+            IEnumerable<SystemUsage> data;
+            int count = collection.Count() - 1;//현재까지 저장된 data의 개수이다.
+            if (count < 13)
+            {
+                data = selectSysUsage(count);//위 개수만큼 data를 불러온다
+            }
+            else
+            {
+                data = selectSysUsage(13);//data가 13개 이상 존재하면 13개 까지만 불러온다
+            }
+            foreach (var i in data)//data에 대한 list item 추가
+            {
+                cList.Add(i.CPU);
+                mList.Add(i.Memory);
+                dList.Add(i.Disk);
+            }
+            updateChart(cpuChart, cList);//chart update 이하 동일함
+            updateChart(memoryChart, mList);
+            updateChart(diskChart, dList);
         }
 
         private IEnumerable<SystemUsage> selectSysUsage(int limit)//limit는 가장 최근 data부터 얼만큼 값을 불러올 지에 대한 값
@@ -120,13 +144,18 @@ namespace Argus
             var data = collection.Find(Query.All("Timestamp", Query.Descending), 0, limit);
             return data;
         }
+
+        private void cpuChart_ChildChanged(object sender, System.Windows.Forms.Integration.ChildChangedEventArgs e)
+        {
+
+        }
     }
 
     public class SystemUsage//DB에 들어갈 Data format
     {
-            public int CPU { get; set; }
-            public int Memory { get; set; }
-            public int Disk { get; set; }
+            public double CPU { get; set; }
+            public double Memory { get; set; }
+            public double Disk { get; set; }
             public DateTime Timestamp { get; set; }
     }
 
