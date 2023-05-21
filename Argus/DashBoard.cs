@@ -109,6 +109,20 @@ namespace Argus
             var data = collection.Find(Query.All("Timestamp", Query.Descending), 0, limit);
             return data;
         }
+
+        private void connectButton_Click(object sender, EventArgs e)//Connect to Remote PC 버튼 클릭 이벤트
+        {
+            Parent pr=new Parent();
+            DialogResult dResult=pr.ShowDialog();
+            if(dResult == DialogResult.OK)
+            {
+                MessageBox.Show("OK");
+            }
+            else if(dResult == DialogResult.Cancel)
+            {
+                MessageBox.Show("Cancel");
+            }
+        }
     }
 
     public class SystemUsage//DB에 들어갈 Data format

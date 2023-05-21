@@ -34,15 +34,17 @@
             this.diskChart = new LiveCharts.WinForms.CartesianChart();
             this.memoryLabel = new System.Windows.Forms.Label();
             this.diskLabel = new System.Windows.Forms.Label();
+            this.connectButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cpuLabel
             // 
             this.cpuLabel.BackColor = System.Drawing.Color.Gray;
-            this.cpuLabel.Location = new System.Drawing.Point(12, 18);
+            this.cpuLabel.Location = new System.Drawing.Point(41, 121);
+            this.cpuLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.cpuLabel.Name = "cpuLabel";
             this.cpuLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.cpuLabel.Size = new System.Drawing.Size(853, 24);
+            this.cpuLabel.Size = new System.Drawing.Size(1109, 32);
             this.cpuLabel.TabIndex = 4;
             this.cpuLabel.Text = "CPU USAGE";
             this.cpuLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -51,10 +53,10 @@
             // 
             this.cpuChart.BackColor = System.Drawing.Color.Black;
             this.cpuChart.ForeColor = System.Drawing.Color.Chocolate;
-            this.cpuChart.Location = new System.Drawing.Point(12, 42);
-            this.cpuChart.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cpuChart.Location = new System.Drawing.Point(41, 153);
+            this.cpuChart.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cpuChart.Name = "cpuChart";
-            this.cpuChart.Size = new System.Drawing.Size(853, 128);
+            this.cpuChart.Size = new System.Drawing.Size(1109, 171);
             this.cpuChart.TabIndex = 1;
             this.cpuChart.Text = "cpuChart";
             // 
@@ -62,10 +64,10 @@
             // 
             this.memoryChart.BackColor = System.Drawing.Color.Black;
             this.memoryChart.ForeColor = System.Drawing.Color.Chocolate;
-            this.memoryChart.Location = new System.Drawing.Point(12, 209);
-            this.memoryChart.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.memoryChart.Location = new System.Drawing.Point(41, 376);
+            this.memoryChart.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.memoryChart.Name = "memoryChart";
-            this.memoryChart.Size = new System.Drawing.Size(853, 128);
+            this.memoryChart.Size = new System.Drawing.Size(1109, 171);
             this.memoryChart.TabIndex = 2;
             this.memoryChart.Text = "memoryChart";
             // 
@@ -73,19 +75,20 @@
             // 
             this.diskChart.BackColor = System.Drawing.Color.Black;
             this.diskChart.ForeColor = System.Drawing.Color.Chocolate;
-            this.diskChart.Location = new System.Drawing.Point(12, 375);
-            this.diskChart.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.diskChart.Location = new System.Drawing.Point(41, 597);
+            this.diskChart.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.diskChart.Name = "diskChart";
-            this.diskChart.Size = new System.Drawing.Size(853, 128);
+            this.diskChart.Size = new System.Drawing.Size(1109, 171);
             this.diskChart.TabIndex = 3;
             this.diskChart.Text = "diskChart";
             // 
             // memoryLabel
             // 
             this.memoryLabel.BackColor = System.Drawing.Color.Gray;
-            this.memoryLabel.Location = new System.Drawing.Point(12, 185);
+            this.memoryLabel.Location = new System.Drawing.Point(41, 344);
+            this.memoryLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.memoryLabel.Name = "memoryLabel";
-            this.memoryLabel.Size = new System.Drawing.Size(853, 24);
+            this.memoryLabel.Size = new System.Drawing.Size(1109, 32);
             this.memoryLabel.TabIndex = 5;
             this.memoryLabel.Text = "MEM USAGE";
             this.memoryLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -93,26 +96,40 @@
             // diskLabel
             // 
             this.diskLabel.BackColor = System.Drawing.Color.Gray;
-            this.diskLabel.Location = new System.Drawing.Point(12, 351);
+            this.diskLabel.Location = new System.Drawing.Point(41, 565);
+            this.diskLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.diskLabel.Name = "diskLabel";
-            this.diskLabel.Size = new System.Drawing.Size(853, 24);
+            this.diskLabel.Size = new System.Drawing.Size(1109, 32);
             this.diskLabel.TabIndex = 6;
             this.diskLabel.Text = "DISK USAGE";
             this.diskLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // connectButton
+            // 
+            this.connectButton.BackColor = System.Drawing.Color.Black;
+            this.connectButton.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.connectButton.Location = new System.Drawing.Point(41, 38);
+            this.connectButton.Name = "connectButton";
+            this.connectButton.Size = new System.Drawing.Size(283, 54);
+            this.connectButton.TabIndex = 7;
+            this.connectButton.Text = "Connect to Remote PC";
+            this.connectButton.UseVisualStyleBackColor = false;
+            this.connectButton.Click += new System.EventHandler(this.connectButton_Click);
+            // 
             // DashBoard
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DimGray;
-            this.ClientSize = new System.Drawing.Size(875, 518);
+            this.ClientSize = new System.Drawing.Size(1202, 821);
+            this.Controls.Add(this.connectButton);
             this.Controls.Add(this.cpuLabel);
             this.Controls.Add(this.diskLabel);
             this.Controls.Add(this.memoryLabel);
             this.Controls.Add(this.diskChart);
             this.Controls.Add(this.memoryChart);
             this.Controls.Add(this.cpuChart);
-
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "DashBoard";
             this.Text = "Argus";
             this.Load += new System.EventHandler(this.DashBoard_Load);
@@ -127,6 +144,7 @@
         private System.Windows.Forms.Label cpuLabel;
         private System.Windows.Forms.Label memoryLabel;
         private System.Windows.Forms.Label diskLabel;
+        private System.Windows.Forms.Button connectButton;
     }
 }
 
