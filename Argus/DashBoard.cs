@@ -34,7 +34,7 @@ namespace Argus
         {
             someChart.AxisX.Add(new Axis
             {
-                Title = "Time",
+                Title = "Time (mins ago)",
                 Labels = labels,
                 Separator = new Separator // force the separator step to 1, so it always display all labels
                 {
@@ -49,7 +49,9 @@ namespace Argus
                 Title = "Usage",
                 LabelFormatter = value => value + "%",
                 //LabelFormatter = value => value.ToString("P"),//표준형식지정자 (P) 사용
-                Separator = new Separator()
+                Separator = new Separator(),
+                MinValue = 0,
+                MaxValue = 100,
             });
 
         }
