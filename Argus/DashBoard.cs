@@ -22,15 +22,13 @@ using Brushes = System.Windows.Media.Brushes;
 
 namespace Argus
 {
-    delegate void InsertDBData();
     public partial class DashBoard : Form
     {
-        private static int ID = 0;
         private LiteDatabase db;
         private ILiteCollection<SystemUsage> collection;
-        public int TIME_INTERVAL = 5 * 1000;//5분단위 시간(밀리초)5 * 60 * 1000
+        public int TIME_INTERVAL = 5 * 1000; //5분단위 시간(밀리초) 5 * 60 * 1000
 
-        static void makeChart(LiveCharts.WinForms.CartesianChart someChart, List<string>labels)
+        static void makeChart(LiveCharts.WinForms.CartesianChart someChart, List<string> labels)
         {
             someChart.AxisX.Add(new Axis
             {
@@ -41,7 +39,7 @@ namespace Argus
                     Step = 1,
                     IsEnabled = false //disable it to make it invisible.
                 },
-                LabelsRotation = 0//x축 label 기울기
+                LabelsRotation = 0 //x축 label 기울기
             }) ;
 
             someChart.AxisY.Add(new Axis
@@ -73,16 +71,10 @@ namespace Argus
         {
             InitializeComponent();
 
-            List<double> cValues = new List<double> { 6, 7, 3, 4, 6, 5, 3, 2, 6, 7, 8, 7, 5 };
             List<string> labels = new List<string> { "0", "5", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55", "60" };
             List<LiveCharts.WinForms.CartesianChart> chartList = new List<LiveCharts.WinForms.CartesianChart> { cpuChart, memoryChart, diskChart };
 
-            chartList.ForEach(chart =>
-            {
-                makeChart(chart, labels);
-                updateChart(chart, cValues);
-            });
-
+            chartList.ForEach(chart => makeChart(chart, labels));
         }
         private System.Windows.Forms.Timer timer;
         private void DashBoard_Load(object sender, EventArgs e)
@@ -116,8 +108,10 @@ namespace Argus
             List<double> cList = new List<double>();//CPU chart update를 위한 list 이하 동일함
             List<double> mList = new List<double>();
             List<double> dList = new List<double>();
+
             IEnumerable<SystemUsage> data;
             int count = collection.Count() - 1;//현재까지 저장된 data의 개수이다.
+
             if (count < 13)
             {
                 data = selectSysUsage(count);//위 개수만큼 data를 불러온다
@@ -126,34 +120,35 @@ namespace Argus
             {
                 data = selectSysUsage(13);//data가 13개 이상 존재하면 13개 까지만 불러온다
             }
+
             foreach (var i in data)//data에 대한 list item 추가
             {
                 cList.Add(i.CPU);
                 mList.Add(i.Memory);
                 dList.Add(i.Disk);
             }
+
             updateChart(cpuChart, cList);//chart update 이하 동일함
             updateChart(memoryChart, mList);
             updateChart(diskChart, dList);
         }
 
-        private IEnumerable<SystemUsage> selectSysUsage(int limit)//limit는 가장 최근 data부터 얼만큼 값을 불러올 지에 대한 값
-            //IEnumerable은 iter가 사용 가능한 자료구조로 만약 각 attribute에 대한 값을 불러오려면 무조건 foreach를 사용하여 접근해야한다. 이하는 그 예시이다.
-            //var data = selectSysUsage(5); 최근 data로부터 5개 값을 불러온다
-            //foreach (var i in data) foreach문
-            //    textBox1.Text +=( "CPU: " + i.CPU.ToString()); 이런식으로 i.CPU로 접근 한 후 원하는 대로 변환하여 사용하면 된다.
+        /*
+         * limit는 가장 최근 data부터 얼만큼 값을 불러올 지에 대한 값이며,
+         * IEnumerable은 iter가 사용 가능한 자료구조로 만약 각 attribute에 대한 값을 불러오려면 무조건 foreach를 사용하여 접근해야한다. 
+         * ex)
+         * var data = selectSysUsage(5); 최근 data로부터 5개 값을 
+         * foreach (var i in data) 
+         *     textBox1.Text +=( "CPU: " + i.CPU.ToString()); 
+         * 이런식으로 i.CPU로 접근 한 후 원하는 대로 변환하여 사용하면 된다.
+         */
+        private IEnumerable<SystemUsage> selectSysUsage(int limit)
         {
-            var data = collection.Find(Query.All("Timestamp", Query.Descending), 0, limit);
-            return data;
-        }
-
-        private void cpuChart_ChildChanged(object sender, System.Windows.Forms.Integration.ChildChangedEventArgs e)
-        {
-
+            return collection.Find(Query.All("Timestamp", Query.Descending), 0, limit);
         }
     }
 
-    public class SystemUsage//DB에 들어갈 Data format
+    public class SystemUsage //DB에 들어갈 Data format
     {
             public double CPU { get; set; }
             public double Memory { get; set; }
@@ -166,11 +161,14 @@ namespace Argus
         public int getCpuUsage()
         {
             int Cpu = 0;
+
             ManagementObjectSearcher cpuusage_info = new ManagementObjectSearcher("select * from Win32_PerfFormattedData_PerfOS_Processor");
+
             foreach (ManagementObject wmi_CPUUSAGE in cpuusage_info.Get())
             {
                 Cpu = int.Parse(wmi_CPUUSAGE["PercentProcessorTime"].ToString());
             }
+
             return Cpu;
         }
 
@@ -179,8 +177,10 @@ namespace Argus
             double Mem;
             double MemSize = 0;
             double MemUsage = 0;
+
             ManagementClass cls = new ManagementClass("Win32_OperatingSystem");
             ManagementObjectCollection ram = cls.GetInstances();
+
             foreach (ManagementObject ram_usage in ram)
             {
                 MemSize = int.Parse(ram_usage["TotalVisibleMemorySize"].ToString());
@@ -188,6 +188,7 @@ namespace Argus
             }
             Mem = (double)MemUsage / MemSize;
             Mem = Math.Round(Mem, 4) * 100;
+
             return Mem;
         }
 
@@ -196,7 +197,9 @@ namespace Argus
             double DiskUsage = 0;
             double DiskSize = 0;
             double DiskPerc;
+
             DriveInfo[] allDrives = DriveInfo.GetDrives();
+
             foreach (DriveInfo d in allDrives)
             {
                 if (d.IsReady == true)
@@ -209,6 +212,7 @@ namespace Argus
             }
             DiskPerc = DiskUsage / DiskSize;
             DiskPerc = Math.Round(DiskPerc, 4) * 100;
+
             return DiskPerc;
         }
     }
