@@ -60,6 +60,7 @@
             this.cpuChart.Size = new System.Drawing.Size(1000, 100);
             this.cpuChart.TabIndex = 1;
             this.cpuChart.Text = "cpuChart";
+            this.cpuChart.ChildChanged += new System.EventHandler<System.Windows.Forms.Integration.ChildChangedEventArgs>(this.cpuChart_ChildChanged);
             // 
             // memoryChart
             // 
@@ -121,7 +122,6 @@
             this.Controls.Add(this.diskChart);
             this.Controls.Add(this.memoryChart);
             this.Controls.Add(this.cpuChart);
-            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "DashBoard";
             this.Text = "Argus";
             this.Load += new System.EventHandler(this.DashBoard_Load);
