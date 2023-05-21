@@ -17,5 +17,14 @@ namespace Argus
             InitializeComponent();
         }
 
+        private void connectButton_Click(object sender, EventArgs e)
+        {
+            //해당 ip에 연결 시도
+        }
+
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
