@@ -114,11 +114,8 @@ namespace Argus
         {
             Parent pr=new Parent();
             DialogResult dResult=pr.ShowDialog();
-            if(dResult == DialogResult.OK)
-            {
-                MessageBox.Show("OK");
-            }
-            else if(dResult == DialogResult.Cancel)
+          
+            if(dResult == DialogResult.Cancel)
             {
                 MessageBox.Show("Cancel");
             }

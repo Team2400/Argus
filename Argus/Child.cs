@@ -12,9 +12,20 @@ namespace Argus
 {
     public partial class Child : Form
     {
-        public Child()
+        public int intData;
+        public string stringData;
+        public Child(int i, string s)
         {
             InitializeComponent();
+            intData = i;
+            stringData = s;
+            label1.Text = "패킷 전송 : Data = " + intData;
+            label2.Text = "패킷 전송 : Data = " + stringData;
+        }
+
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
