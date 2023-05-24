@@ -26,7 +26,7 @@ namespace Argus
     {
         private LiteDatabase db;
         private ILiteCollection<SystemUsage> collection;
-        public int TIME_INTERVAL = 5 * 1000; //5분단위 시간(밀리초) 5 * 60 * 1000
+        public int TIME_INTERVAL = 5 * 1000; //5분단위 시간(밀리초)
 
         static void makeChart(LiveCharts.WinForms.CartesianChart someChart, List<string> labels)
         {
@@ -109,6 +109,8 @@ namespace Argus
             List<double> mList = new List<double>();
             List<double> dList = new List<double>();
 
+            List<DateTime> timeList = new List<DateTime>();
+
             IEnumerable<SystemUsage> data;
             int count = collection.Count() - 1;//현재까지 저장된 data의 개수이다.
 
@@ -118,15 +120,45 @@ namespace Argus
             }
             else
             {
-                data = selectSysUsage(13);//data가 13개 이상 존재하면 13개 까지만 불러온다
+                count = 13;
+                data = selectSysUsage(count);//data가 13개 이상 존재하면 13개 까지만 불러온다
             }
-
+            //data 가공 시작
             foreach (var i in data)//data에 대한 list item 추가
-            {
+            {   
                 cList.Add(i.CPU);
                 mList.Add(i.Memory);
                 dList.Add(i.Disk);
+                timeList.Add(i.Timestamp);
             }
+            TimeSpan destanceOfTime = TimeSpan.Zero;
+            int timeSpace = 0;
+            for(int i=0; i< count - 1; i++)
+            {
+                destanceOfTime = timeList[i] - timeList[i+1];
+                timeSpace = (int)(destanceOfTime.TotalSeconds / 6);
+                if (timeSpace > 0)
+                {
+                    for(int j=0; j<timeSpace; j++) 
+                    {
+                        dList.Insert(i + 1, 0);
+                        dList.RemoveAt(dList.Count - 1);
+                        cList.Insert(i + 1, 0);
+                        cList.RemoveAt(cList.Count - 1);
+                        mList.Insert(i + 1, 0);
+                        mList.RemoveAt(mList.Count - 1);
+                        timeList.Insert(i + 1, DateTime.Now);
+                        timeList.RemoveAt(cList.Count - 1);
+                        i++;// 여기서 data추가 량이 많아지면 오류 발생
+                        if (i == count - 1)
+                            break;
+                    }
+                }
+            }
+            cList.Reverse();
+            mList.Reverse();
+            dList.Reverse();
+            timeList.Reverse();
 
             updateChart(cpuChart, cList);//chart update 이하 동일함
             updateChart(memoryChart, mList);
