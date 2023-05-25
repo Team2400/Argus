@@ -34,6 +34,7 @@
             this.diskChart = new LiveCharts.WinForms.CartesianChart();
             this.memoryLabel = new System.Windows.Forms.Label();
             this.diskLabel = new System.Windows.Forms.Label();
+            this.connectButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cpuLabel
@@ -41,7 +42,7 @@
             this.cpuLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(30)))));
             this.cpuLabel.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.cpuLabel.ForeColor = System.Drawing.Color.White;
-            this.cpuLabel.Location = new System.Drawing.Point(0, 0);
+            this.cpuLabel.Location = new System.Drawing.Point(0, 47);
             this.cpuLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.cpuLabel.Name = "cpuLabel";
             this.cpuLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -54,7 +55,7 @@
             // 
             this.cpuChart.BackColor = System.Drawing.Color.Black;
             this.cpuChart.ForeColor = System.Drawing.Color.Chocolate;
-            this.cpuChart.Location = new System.Drawing.Point(0, 21);
+            this.cpuChart.Location = new System.Drawing.Point(0, 68);
             this.cpuChart.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.cpuChart.Name = "cpuChart";
             this.cpuChart.Size = new System.Drawing.Size(1000, 100);
@@ -65,7 +66,7 @@
             // 
             this.memoryChart.BackColor = System.Drawing.Color.Black;
             this.memoryChart.ForeColor = System.Drawing.Color.Chocolate;
-            this.memoryChart.Location = new System.Drawing.Point(0, 143);
+            this.memoryChart.Location = new System.Drawing.Point(0, 190);
             this.memoryChart.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.memoryChart.Name = "memoryChart";
             this.memoryChart.Size = new System.Drawing.Size(1000, 100);
@@ -76,7 +77,7 @@
             // 
             this.diskChart.BackColor = System.Drawing.Color.Black;
             this.diskChart.ForeColor = System.Drawing.Color.Chocolate;
-            this.diskChart.Location = new System.Drawing.Point(0, 265);
+            this.diskChart.Location = new System.Drawing.Point(0, 312);
             this.diskChart.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.diskChart.Name = "diskChart";
             this.diskChart.Size = new System.Drawing.Size(1000, 100);
@@ -88,7 +89,7 @@
             this.memoryLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(30)))));
             this.memoryLabel.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.memoryLabel.ForeColor = System.Drawing.Color.White;
-            this.memoryLabel.Location = new System.Drawing.Point(0, 122);
+            this.memoryLabel.Location = new System.Drawing.Point(0, 169);
             this.memoryLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.memoryLabel.Name = "memoryLabel";
             this.memoryLabel.Size = new System.Drawing.Size(1000, 20);
@@ -101,7 +102,7 @@
             this.diskLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(30)))));
             this.diskLabel.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.diskLabel.ForeColor = System.Drawing.Color.White;
-            this.diskLabel.Location = new System.Drawing.Point(0, 244);
+            this.diskLabel.Location = new System.Drawing.Point(0, 291);
             this.diskLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.diskLabel.Name = "diskLabel";
             this.diskLabel.Size = new System.Drawing.Size(1000, 20);
@@ -109,12 +110,23 @@
             this.diskLabel.Text = "DISK USAGE";
             this.diskLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // connectButton
+            // 
+            this.connectButton.Location = new System.Drawing.Point(12, 12);
+            this.connectButton.Name = "connectButton";
+            this.connectButton.Size = new System.Drawing.Size(162, 23);
+            this.connectButton.TabIndex = 7;
+            this.connectButton.Text = "Connect to Remote PC";
+            this.connectButton.UseVisualStyleBackColor = true;
+            this.connectButton.Click += new System.EventHandler(this.connectButton_Click);
+            // 
             // DashBoard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DimGray;
-            this.ClientSize = new System.Drawing.Size(1001, 366);
+            this.ClientSize = new System.Drawing.Size(1001, 414);
+            this.Controls.Add(this.connectButton);
             this.Controls.Add(this.cpuLabel);
             this.Controls.Add(this.diskLabel);
             this.Controls.Add(this.memoryLabel);
@@ -135,6 +147,7 @@
         private System.Windows.Forms.Label cpuLabel;
         private System.Windows.Forms.Label memoryLabel;
         private System.Windows.Forms.Label diskLabel;
+        private System.Windows.Forms.Button connectButton;
     }
 }
 

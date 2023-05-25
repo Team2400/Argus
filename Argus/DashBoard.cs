@@ -105,6 +105,17 @@ namespace Argus
             ArgusChart.updateChart(memoryChart, mList);
             ArgusChart.updateChart(diskChart, dList);
         }
+
+        private void connectButton_Click(object sender, EventArgs e)
+        {
+            Parent pr = new Parent();
+            DialogResult dResult = pr.ShowDialog();
+
+            if (dResult == DialogResult.Cancel)
+            {
+                MessageBox.Show("Cancel");
+            }
+        }
     }
 }
 
