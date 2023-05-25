@@ -106,7 +106,7 @@ namespace Argus
             ArgusChart.updateChart(diskChart, dList);
         }
 
-        private void connectButton_Click(object sender, EventArgs e)
+        private void connectButton_Click(object sender, EventArgs e)//Connect to Remote PC 버튼 클릭 이벤트
         {
             Parent pr = new Parent();
             DialogResult dResult = pr.ShowDialog();
