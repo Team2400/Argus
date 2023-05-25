@@ -14,19 +14,23 @@ namespace Argus
     {
         int ChildI;
         string ChildS;
-        SystemUsage[] ChildU;
+        SystemUsage ChildU = new SystemUsage();
 
-        public Child(int i, string s)
+        public Child(int i, string s, SystemUsage u)
         {
             InitializeComponent();
             ChildI = i;
             ChildS = s;
-            label1.Text = "IntData: " + ChildI;
-            label2.Text = "StringData: " + ChildS;
-            //ChildU = new SystemUsage[12];
+            ChildU = u;
+            label1.Text = "CPU: " + ChildU.CPU;
+            label2.Text = "Mem: " + ChildU.Memory;
+            label3.Text = "Disk: " + ChildU.Disk;
+            label4.Text = "Timestamp: " + ChildU.Timestamp;
+            label5.Text = "Int: " + ChildI;
+            label6.Text = "String: " + ChildS;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)//Cancel 버튼 클릭 이벤트
         {
             this.Close();
         }
