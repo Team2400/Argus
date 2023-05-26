@@ -114,15 +114,11 @@ namespace Argus
             IEnumerable<SystemUsage> data;
             int count = collection.Count() - 1;//현재까지 저장된 data의 개수이다.
 
-            if (count < 13)
-            {
-                data = selectSysUsage(count);//위 개수만큼 data를 불러온다
-            }
-            else
-            {
+            if (count >= 13)//가져올 data의 상한을 정한다.
                 count = 13;
-                data = selectSysUsage(count);//data가 13개 이상 존재하면 13개 까지만 불러온다
-            }
+            
+            data = selectSysUsage(count);//data를 위 count만큼 불러온다
+
             //data 가공 시작
             foreach (var i in data)//data에 대한 list item 추가
             {   
@@ -136,7 +132,7 @@ namespace Argus
             for(int i=0; i< count - 1; i++)
             {
                 destanceOfTime = timeList[i] - timeList[i+1];
-                timeSpace = (int)(destanceOfTime.TotalSeconds / 6);
+                timeSpace = (int)(destanceOfTime.TotalSeconds / 6);//시간 차이를 계산하여 6초 이상이면 그 만큼 0을 삽입
                 if (timeSpace > 0)
                 {
                     for(int j=0; j<timeSpace; j++) 
@@ -150,15 +146,11 @@ namespace Argus
                         timeList.Insert(i + 1, DateTime.Now);
                         timeList.RemoveAt(cList.Count - 1);
                         i++;// 여기서 data추가 량이 많아지면 오류 발생
-                        if (i == count - 1)
+                        if (i == count - 1)//따라서 0 삽입의 상한을 지정한다
                             break;
                     }
                 }
             }
-            cList.Reverse();
-            mList.Reverse();
-            dList.Reverse();
-            timeList.Reverse();
 
             updateChart(cpuChart, cList);//chart update 이하 동일함
             updateChart(memoryChart, mList);
