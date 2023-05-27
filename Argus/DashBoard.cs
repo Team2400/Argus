@@ -30,7 +30,7 @@ namespace Argus
         private System.Windows.Forms.Timer timerMinute;
         private System.Windows.Forms.Timer timerHour;
         private System.Windows.Forms.Timer timerDay;
-        public int checkTimeInterval = 1;//어떤 단위 시간으로 chart를 update할 지 결정하는 변수
+        public int checkTimeInterval = 2;//어떤 단위 시간으로 chart를 update할 지 결정하는 변수
 
         public DashBoard()
         {
@@ -135,11 +135,18 @@ namespace Argus
         }
         private void Timer_TickHour(object sender, EventArgs e)
         {
-            systemUsageDAOHour.insertDB(
+            DateTime lastData = systemUsageDAOHour.selectSysUsage(1).First().Timestamp;
+            TimeSpan t = DateTime.Now - lastData;
+            if (t.TotalMinutes >= 5)//가장 최근 data보다 5분 이상 차이가 나면 data를 insert한다.
+            {
+                systemUsageDAOHour.insertDB(
                 SystemUsageManager.getCpuUsage(),
                 (int)SystemUsageManager.getMemUsage(),
                 (int)SystemUsageManager.getDiskUsage()
-            );//data insert at DB
+                );//data insert at DB
+            }
+
+            
 
             List<double> cList = new List<double>();//CPU chart update를 위한 list 이하 동일함
             List<double> mList = new List<double>();
@@ -202,11 +209,18 @@ namespace Argus
         }
         private void Timer_TickDay(object sender, EventArgs e)
         {
-            systemUsageDAOMinute.insertDB(
+
+            DateTime lastData = systemUsageDAODay.selectSysUsage(1).First().Timestamp;
+            TimeSpan t = DateTime.Now - lastData;
+            if (t.TotalHours >= 2)//가장 최근 data보다 2시간 이상 차이가 나면 data를 insert한다.
+            {
+                systemUsageDAODay.insertDB(
                 SystemUsageManager.getCpuUsage(),
                 (int)SystemUsageManager.getMemUsage(),
                 (int)SystemUsageManager.getDiskUsage()
-            );//data insert at DB
+                );//data insert at DB
+            }
+            
 
             List<double> cList = new List<double>();//CPU chart update를 위한 list 이하 동일함
             List<double> mList = new List<double>();
@@ -215,12 +229,12 @@ namespace Argus
             List<DateTime> timeList = new List<DateTime>();
 
             IEnumerable<SystemUsageDTO> data;
-            int count = systemUsageDAOMinute.GetCollection().Count() - 1;//현재까지 저장된 data의 개수이다.
+            int count = systemUsageDAODay.GetCollection().Count() - 1;//현재까지 저장된 data의 개수이다.
 
             if (count >= 13)//가져올 data의 상한을 정한다.
                 count = 13;
 
-            data = systemUsageDAOMinute.selectSysUsage(count);//data를 위 count만큼 불러온다
+            data = systemUsageDAODay.selectSysUsage(count);//data를 위 count만큼 불러온다
 
             if (checkTimeInterval != 2)
                 return;
