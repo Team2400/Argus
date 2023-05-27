@@ -30,7 +30,7 @@ namespace Argus
         private System.Windows.Forms.Timer timerMinute;
         private System.Windows.Forms.Timer timerHour;
         private System.Windows.Forms.Timer timerDay;
-        public int checkTimeInterval = 0;//어떤 단위 시간으로 chart를 update할 지 결정하는 변수
+        public int checkTimeInterval = 1;//어떤 단위 시간으로 chart를 update할 지 결정하는 변수
 
         public DashBoard()
         {
@@ -287,12 +287,12 @@ namespace Argus
                         timeSpace = (int)(destanceOfTime.TotalSeconds / 6);
                         break;
                     case 1:
-                        timeSpace = (int)(destanceOfTime.TotalMinutes / 5);
+                        timeSpace = (int)(destanceOfTime.TotalMinutes / 6);
                         if ((int)(destanceOfTime.TotalMinutes % 5) > 2)//반올림 작업
                             timeSpace++;
                         break;
                     case 2:
-                        timeSpace = (int)(destanceOfTime.TotalHours / 2);
+                        timeSpace = (int)(destanceOfTime.TotalHours / 3);
                         if ((int)(destanceOfTime.TotalHours % 2) > 1)//반올림 작업
                             timeSpace++;
                         break;
