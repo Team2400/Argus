@@ -142,6 +142,31 @@
             this.label3.TabIndex = 4;
             this.label3.Text = "DISK";
             // 
+            // Infobutton
+            // 
+            this.Infobutton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.Infobutton.Font = new System.Drawing.Font("맑은 고딕", 9.75F);
+            this.Infobutton.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.Infobutton.Location = new System.Drawing.Point(183, 7);
+            this.Infobutton.Name = "Infobutton";
+            this.Infobutton.Size = new System.Drawing.Size(134, 32);
+            this.Infobutton.TabIndex = 8;
+            this.Infobutton.Text = "Show System Info";
+            this.Infobutton.UseVisualStyleBackColor = false;
+            this.Infobutton.Click += new System.EventHandler(this.Infobutton_Click);
+            // 
+            // connectButton
+            // 
+            this.connectButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.connectButton.Font = new System.Drawing.Font("맑은 고딕", 9.75F);
+            this.connectButton.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.connectButton.Location = new System.Drawing.Point(12, 7);
+            this.connectButton.Name = "connectButton";
+            this.connectButton.Size = new System.Drawing.Size(163, 32);
+            this.connectButton.TabIndex = 9;
+            this.connectButton.Text = "Connect to Remote PC";
+            this.connectButton.UseVisualStyleBackColor = false;
+            // 
             // DashBoard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
