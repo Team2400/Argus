@@ -26,15 +26,11 @@ namespace Argus
         private TcpClient m_client;
         private bool m_bConnect = false;
         private byte[] readBuffer = new byte[1024 * 4];
-       
-        public Packet.IntegerClass m_integerClass;
-        public Packet.StringClass m_stringClass;
-        public Packet.SystemUsage m_usageClass;
+
+        public Packet.SystemUsageDTOArray m_usageArrayClass;
 
         //Child폼으로 전달될 데이터 변수
-        int ChildI; 
-        string ChildS = "";
-        SystemUsageDTO ChildU = new SystemUsageDTO();
+        SystemUsageDTO[] ChildA;
 
         public Parent()
         {
@@ -98,6 +94,7 @@ namespace Argus
             }
 
             TcpClient client = this.m_listener.AcceptTcpClient(); //Parent창 켜고 접속 대기중 Cancel버튼 누르면 오류발생
+            try { }catch(Exception ex) { }
 
             if (client.Connected)
             {
@@ -128,29 +125,25 @@ namespace Argus
             if (!this.m_bClientOn)
             {
                 return;
-            }
-            //int 데이터 전송
-            Packet.IntegerClass ii = new Packet.IntegerClass();
-            ii.Type = (int)PacketType.정수형;
-            ii.Data = 2023;
-            Packet.Serialize(ii).CopyTo(this.sendBuffer, 0);
-            this.Send();
-
-            //string 데이터 전송
-            Packet.StringClass ss = new Packet.StringClass();
-            ss.Type = (int)PacketType.텍스트;
-            ss.s = "텍스트";
-            Packet.Serialize(ss).CopyTo(this.sendBuffer, 0);
-            this.Send();
-
+            }           
             //SystemUsage클래스 데이터 전송
-            Packet.SystemUsage u = new Packet.SystemUsage();
-            u.Type = (int)PacketType.클래스;
-            u.CPU = 1.1;
-            u.Memory = 2.2;
-            u.Disk = 3.3;
-            u.Timestamp = DateTime.Now;
-            Packet.Serialize(u).CopyTo(this.sendBuffer, 0);
+            Packet.SystemUsageDTOArray a = new Packet.SystemUsageDTOArray();
+            a.Type = (int)PacketType.ClassArray;
+            a.arrSize = 12;
+            a.Arr = new Packet.SystemUsageDTO[a.arrSize];
+            double b = 1.1;
+            double c = 1.2;
+            double d = 1.3;
+            for (int i = 0; i < a.Arr.Length; i++)
+            {
+                a.Arr[i] = new Packet.SystemUsageDTO();
+                a.Arr[i].CPU = b;
+                a.Arr[i].Memory = c;
+                a.Arr[i].Disk = d;
+                a.Arr[i].Timestamp = DateTime.Now;
+                b += 1; c += 1; d += 1;
+            }            
+            Packet.Serialize(a).CopyTo(this.sendBuffer, 0);
             this.Send();
         }
 
@@ -158,7 +151,7 @@ namespace Argus
         {
             int nRead = 0;
             int n = 0;
-            const int dataNum = 3; //전송받는 데이터의 개수
+            const int dataNum = 1; //전송받는 데이터의 개수
 
             while (this.m_bConnect)
             {
@@ -175,41 +168,28 @@ namespace Argus
                 Packet packet = (Packet)Packet.Desserialize(this.readBuffer);
 
                 switch ((int)packet.Type)
-                {
-                    case (int)PacketType.정수형:
+                {                                        
+                    case (int)PacketType.ClassArray:
                         {
-                            this.m_integerClass = (Packet.IntegerClass)Packet.Desserialize(this.readBuffer);
+                            this.m_usageArrayClass = (Packet.SystemUsageDTOArray)Packet.Desserialize(this.readBuffer);
                             this.Invoke(new MethodInvoker(delegate ()
                             {
-                                ChildI = this.m_integerClass.Data;
+                                ChildA = new SystemUsageDTO[m_usageArrayClass.arrSize];
+                                for (int i = 0; i < ChildA.Length; i++)
+                                {
+                                    ChildA[i] = new SystemUsageDTO();
+                                    ChildA[i].CPU = this.m_usageArrayClass.Arr[i].CPU;
+                                    ChildA[i].Memory = this.m_usageArrayClass.Arr[i].Memory;
+                                    ChildA[i].Disk = this.m_usageArrayClass.Arr[i].Disk;
+                                    ChildA[i].Timestamp = this.m_usageArrayClass.Arr[i].Timestamp;
+                                }                                
                             }));
                             break;
-                        }
-                    case (int)PacketType.텍스트:
-                        {
-                            this.m_stringClass = (Packet.StringClass)Packet.Desserialize(this.readBuffer);
-                            this.Invoke(new MethodInvoker(delegate ()
-                            {
-                                ChildS = this.m_stringClass.s;
-                            }));
-                            break;
-                        }
-                    case (int)PacketType.클래스:
-                        {
-                            this.m_usageClass = (Packet.SystemUsage)Packet.Desserialize(this.readBuffer);
-                            this.Invoke(new MethodInvoker(delegate ()
-                            {
-                                ChildU.CPU = this.m_usageClass.CPU;
-                                ChildU.Memory = this.m_usageClass.Memory;
-                                ChildU.Disk = this.m_usageClass.Disk;
-                                ChildU.Timestamp = this.m_usageClass.Timestamp;
-                            }));
-                            break;
-                        }
+                        }                    
                 }
                 if (n++ == (dataNum-1)) //데이터 전송 완료 후 Child폼 띄움
                 {
-                    Child cd = new Child(ChildI, ChildS, ChildU);
+                    Child cd = new Child(ChildA);
                     DialogResult dResult = cd.ShowDialog();
 
                     if (dResult == DialogResult.Cancel)
