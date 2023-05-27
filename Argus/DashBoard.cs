@@ -135,15 +135,26 @@ namespace Argus
         }
         private void Timer_TickHour(object sender, EventArgs e)
         {
-            DateTime lastData = systemUsageDAOHour.selectSysUsage(1).First().Timestamp;
-            TimeSpan t = DateTime.Now - lastData;
-            if (t.TotalMinutes >= 5)//가장 최근 data보다 5분 이상 차이가 나면 data를 insert한다.
+            if (systemUsageDAOHour.GetCollection().Count() == 0)//기존에 data가 없을 시 무조건 insert
             {
                 systemUsageDAOHour.insertDB(
                 SystemUsageManager.getCpuUsage(),
                 (int)SystemUsageManager.getMemUsage(),
                 (int)SystemUsageManager.getDiskUsage()
                 );//data insert at DB
+            }
+            else
+            {
+                DateTime lastData = systemUsageDAOHour.selectSysUsage(1).First().Timestamp;
+                TimeSpan t = DateTime.Now - lastData;
+                if (t.TotalMinutes >= 5)//가장 최근 data보다 5분 이상 차이가 나면 data를 insert한다.
+                {
+                    systemUsageDAOHour.insertDB(
+                    SystemUsageManager.getCpuUsage(),
+                    (int)SystemUsageManager.getMemUsage(),
+                    (int)SystemUsageManager.getDiskUsage()
+                    );//data insert at DB
+                }
             }
 
             
@@ -209,16 +220,26 @@ namespace Argus
         }
         private void Timer_TickDay(object sender, EventArgs e)
         {
-
-            DateTime lastData = systemUsageDAODay.selectSysUsage(1).First().Timestamp;
-            TimeSpan t = DateTime.Now - lastData;
-            if (t.TotalHours >= 2)//가장 최근 data보다 2시간 이상 차이가 나면 data를 insert한다.
+            if (systemUsageDAODay.GetCollection().Count() == 0)
             {
                 systemUsageDAODay.insertDB(
                 SystemUsageManager.getCpuUsage(),
                 (int)SystemUsageManager.getMemUsage(),
                 (int)SystemUsageManager.getDiskUsage()
                 );//data insert at DB
+            }
+            else
+            {
+                DateTime lastData = systemUsageDAODay.selectSysUsage(1).First().Timestamp;
+                TimeSpan t = DateTime.Now - lastData;
+                if (t.TotalHours >= 2)//가장 최근 data보다 2시간 이상 차이가 나면 data를 insert한다.
+                {
+                    systemUsageDAODay.insertDB(
+                    SystemUsageManager.getCpuUsage(),
+                    (int)SystemUsageManager.getMemUsage(),
+                    (int)SystemUsageManager.getDiskUsage()
+                    );//data insert at DB
+                }
             }
             
 
