@@ -108,7 +108,7 @@ namespace Argus
 
         private void connectButton_Click(object sender, EventArgs e)//Connect to Remote PC 버튼 클릭 이벤트
         {
-            Parent pr = new Parent();
+            IpDialog pr = new IpDialog();
             DialogResult dResult = pr.ShowDialog();
 
             if (dResult == DialogResult.Cancel)

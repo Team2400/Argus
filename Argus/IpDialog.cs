@@ -15,44 +15,44 @@ using Argus.src;
 
 namespace Argus
 {
-    public partial class Parent : Form
+    public partial class IpDialog : Form
     {        
-        private TcpListener m_listener;
-        private Thread m_thread;
-        private bool m_bClientOn = false;
-        private NetworkStream m_networkstream;
+        private TcpListener listener;
+        private Thread thread;
+        private bool bClientOn = false;
+        private NetworkStream networkstream;
         private byte[] sendBuffer = new byte[1024 * 4];
 
-        private TcpClient m_client;
-        private bool m_bConnect = false;
+        private TcpClient client;
+        private bool bConnect = false;
         private byte[] readBuffer = new byte[1024 * 4];
 
-        public Packet.SystemUsageDTOArray m_usageArrayClass;
+        public Packet.SystemUsageDTOArray usageArrayClass;
 
         //Child폼으로 전달될 데이터 변수
         SystemUsageDTO[] ChildA;
 
-        public Parent()
+        public IpDialog()
         {
             InitializeComponent();
         }
 
         private void connectButton_Click(object sender, EventArgs e)//Connect 버튼 클릭 이벤트
         {
-            this.m_client = new TcpClient();
+            this.client = new TcpClient();
             try
             {
-                this.m_client.Connect(this.textBox1.Text, 7777);
+                this.client.Connect(this.textBox1.Text, 7777);
             }
             catch
             {
                 MessageBox.Show("접속 에러");
                 return;
             }
-            this.m_bConnect = true;
+            this.bConnect = true;
             label.Text = "서버 접속 성공\n";
-            this.m_networkstream = this.m_client.GetStream();
-            Client();
+            this.networkstream = this.client.GetStream();
+            ReceiveUsageData();
         }
 
         private void cancelButton_Click(object sender, EventArgs e)//Cancel 버튼 클릭 이벤트
@@ -62,30 +62,30 @@ namespace Argus
 
         private void Parent_FormClosed(object sender, FormClosedEventArgs e)
         {
-            this.m_listener.Stop();
-            this.m_thread.Abort();
-            if (this.m_client != null)
+            this.listener.Stop();
+            this.thread.Abort();
+            if (this.client != null)
             {
-                this.m_client.Close();
+                this.client.Close();
             }
-            if (this.m_networkstream != null)
+            if (this.networkstream != null)
             {
-                this.m_networkstream.Close();
+                this.networkstream.Close();
             }
         }
 
         private void Parent_Load(object sender, EventArgs e)
         {
-            this.m_thread = new Thread(new ThreadStart(RUN));
-            this.m_thread.Start();
+            this.thread = new Thread(new ThreadStart(RUN));
+            this.thread.Start();
         }
 
         public void RUN()
         {
-            this.m_listener = new TcpListener(7777);
-            this.m_listener.Start();
+            this.listener = new TcpListener(7777);
+            this.listener.Start();
 
-            if (!this.m_bClientOn)
+            if (!this.bClientOn)
             {
                 this.Invoke(new MethodInvoker(delegate ()
                 {
@@ -93,26 +93,26 @@ namespace Argus
                 }));
             }
 
-            TcpClient client = this.m_listener.AcceptTcpClient(); //Parent창 켜고 접속 대기중 Cancel버튼 누르면 오류발생
+            TcpClient client = this.listener.AcceptTcpClient(); //Parent창 켜고 접속 대기중 Cancel버튼 누르면 오류발생
             try { }catch(Exception ex) { }
 
             if (client.Connected)
             {
-                this.m_bClientOn = true;
+                this.bClientOn = true;
                 this.Invoke(new MethodInvoker(delegate ()
                 {
                     label.Text = "클라이언트 접속";
                 }));
 
-                m_networkstream = client.GetStream();
-                Server();
+                networkstream = client.GetStream();
+                SendUsageData();
             }
         }
 
         public void Send()
         {
-            this.m_networkstream.Write(this.sendBuffer, 0, this.sendBuffer.Length);
-            this.m_networkstream.Flush();
+            this.networkstream.Write(this.sendBuffer, 0, this.sendBuffer.Length);
+            this.networkstream.Flush();
 
             for (int i = 0; i < 1024 * 4; i++)
             {
@@ -120,9 +120,9 @@ namespace Argus
             }
         }
 
-        public void Server() //데이터 전송 함수
+        public void SendUsageData() //데이터 전송 함수
         {
-            if (!this.m_bClientOn)
+            if (!this.bClientOn)
             {
                 return;
             }           
@@ -147,23 +147,23 @@ namespace Argus
             this.Send();
         }
 
-        public void Client() //데이터 송신 함수
+        public void ReceiveUsageData() //데이터 송신 함수
         {
             int nRead = 0;
             int n = 0;
             const int dataNum = 1; //전송받는 데이터의 개수
 
-            while (this.m_bConnect)
+            while (this.bConnect)
             {
                 try
                 {
                     nRead = 0;
-                    nRead = this.m_networkstream.Read(readBuffer, 0, 1024 * 4);
+                    nRead = this.networkstream.Read(readBuffer, 0, 1024 * 4);
                 }
                 catch (Exception e)
                 {
-                    this.m_bConnect = false;
-                    this.m_networkstream = null;
+                    this.bConnect = false;
+                    this.networkstream = null;
                 }
                 Packet packet = (Packet)Packet.Desserialize(this.readBuffer);
 
@@ -171,17 +171,17 @@ namespace Argus
                 {                                        
                     case (int)PacketType.ClassArray:
                         {
-                            this.m_usageArrayClass = (Packet.SystemUsageDTOArray)Packet.Desserialize(this.readBuffer);
+                            this.usageArrayClass = (Packet.SystemUsageDTOArray)Packet.Desserialize(this.readBuffer);
                             this.Invoke(new MethodInvoker(delegate ()
                             {
-                                ChildA = new SystemUsageDTO[m_usageArrayClass.arrSize];
+                                ChildA = new SystemUsageDTO[usageArrayClass.arrSize];
                                 for (int i = 0; i < ChildA.Length; i++)
                                 {
                                     ChildA[i] = new SystemUsageDTO();
-                                    ChildA[i].CPU = this.m_usageArrayClass.Arr[i].CPU;
-                                    ChildA[i].Memory = this.m_usageArrayClass.Arr[i].Memory;
-                                    ChildA[i].Disk = this.m_usageArrayClass.Arr[i].Disk;
-                                    ChildA[i].Timestamp = this.m_usageArrayClass.Arr[i].Timestamp;
+                                    ChildA[i].CPU = this.usageArrayClass.Arr[i].CPU;
+                                    ChildA[i].Memory = this.usageArrayClass.Arr[i].Memory;
+                                    ChildA[i].Disk = this.usageArrayClass.Arr[i].Disk;
+                                    ChildA[i].Timestamp = this.usageArrayClass.Arr[i].Timestamp;
                                 }                                
                             }));
                             break;

@@ -1,6 +1,6 @@
 ﻿namespace Argus
 {
-    partial class Parent
+    partial class IpDialog
     {
         /// <summary>
         /// Required designer variable.
