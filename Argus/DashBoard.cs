@@ -15,6 +15,7 @@ using System.IO;
 using System.Windows.Media;
 using Brushes = System.Windows.Media.Brushes;
 using Argus.src;
+using System.Windows.Media.Animation;
 
 namespace Argus
 {
@@ -29,6 +30,7 @@ namespace Argus
             InitializeComponent();
 
             List<string> labels = new List<string> { "0", "5", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55", "60" };
+
             List<LiveCharts.WinForms.CartesianChart> chartList = new List<LiveCharts.WinForms.CartesianChart> { cpuChart, memoryChart, diskChart };
 
             chartList.ForEach(chart => ArgusChart.makeChart(chart, labels));
@@ -75,7 +77,11 @@ namespace Argus
                 timeList.Add(i.Timestamp);
             }
 
-            TimeSpan destanceOfTime = TimeSpan.Zero;
+            cList = dataModulation(cList, timeList, count);
+            mList = dataModulation(mList, timeList, count);
+            dList = dataModulation(dList, timeList, count);
+
+            /*TimeSpan destanceOfTime = TimeSpan.Zero;
             int timeSpace = 0;
 
             for(int i = 0; i < count - 1; i++)
@@ -93,7 +99,44 @@ namespace Argus
                         mList.Insert(i + 1, 0);
                         mList.RemoveAt(mList.Count - 1);
                         timeList.Insert(i + 1, DateTime.Now);
-                        timeList.RemoveAt(cList.Count - 1);
+                        timeList.RemoveAt(timeList.Count - 1);
+                        i++;// 여기서 data추가 량이 많아지면 오류 발생
+                        if (i == count - 1)//따라서 0 삽입의 상한을 지정한다
+                            break;
+                    }
+                }
+            }*/
+
+            ArgusChart.updateChart(cpuChart, cList);//chart update 이하 동일함
+            ArgusChart.updateChart(memoryChart, mList);
+            ArgusChart.updateChart(diskChart, dList);
+        }
+
+        public List<double> dataModulation(List<double> data, List<DateTime> timeList, int count)
+        {
+
+            TimeSpan destanceOfTime = TimeSpan.Zero;
+            int timeSpace = 0;
+
+            List<DateTime> time = new List<DateTime>(timeList.Count);
+
+            for (int i = 0; i < timeList.Count; i++)
+            {
+                time.Add(timeList[i]);
+            }
+            for (int i = 0; i < count - 1; i++)
+            {
+                destanceOfTime = time[i] - time[i + 1];
+                timeSpace = (int)(destanceOfTime.TotalSeconds / 6);//시간 차이를 계산하여 6초 이상이면 그 만큼 0을 삽입
+                if (timeSpace > 0)
+                {
+                    for (int j = 0; j < timeSpace; j++)
+                    {
+                        
+                        data.Insert(i + 1, 0);
+                        data.RemoveAt(data.Count - 1);
+                        time.Insert(i + 1, DateTime.Now);
+                        time.RemoveAt(time.Count - 1);
                         i++;// 여기서 data추가 량이 많아지면 오류 발생
                         if (i == count - 1)//따라서 0 삽입의 상한을 지정한다
                             break;
@@ -101,9 +144,7 @@ namespace Argus
                 }
             }
 
-            ArgusChart.updateChart(cpuChart, cList);//chart update 이하 동일함
-            ArgusChart.updateChart(memoryChart, mList);
-            ArgusChart.updateChart(diskChart, dList);
+            return data;
         }
     }
 }
