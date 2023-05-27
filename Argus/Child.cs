@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Argus.src;
 
 namespace Argus
 {
@@ -14,9 +15,9 @@ namespace Argus
     {
         int ChildI;
         string ChildS;
-        SystemUsage ChildU = new SystemUsage();
+        SystemUsageDTO ChildU = new SystemUsageDTO();
 
-        public Child(int i, string s, SystemUsage u)
+        public Child(int i, string s, SystemUsageDTO u)
         {
             InitializeComponent();
             ChildI = i;

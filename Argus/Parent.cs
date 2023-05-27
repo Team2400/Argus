@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Documents;
 using System.Windows.Forms;
 using PacketClass; //패킷통신 클래스 라이브러리
+using Argus.src;
 
 namespace Argus
 {
@@ -33,7 +34,7 @@ namespace Argus
         //Child폼으로 전달될 데이터 변수
         int ChildI; 
         string ChildS = "";
-        SystemUsage ChildU = new SystemUsage();
+        SystemUsageDTO ChildU = new SystemUsageDTO();
 
         public Parent()
         {
