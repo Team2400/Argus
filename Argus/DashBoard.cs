@@ -61,6 +61,9 @@ namespace Argus
             timerDay.Interval = TIME_INTERVAL_DAY;//Time Interval
             timerDay.Tick += Timer_TickDay;// 위 시간에 한번씩 Timer_Tick 호출
             timerDay.Start();
+            Timer_TickDay(sender, e);
+            Timer_TickHour(sender, e);
+            Timer_TickMInute(sender, e);
         }
 
         private void Timer_TickMInute(object sender, EventArgs e)
@@ -288,13 +291,13 @@ namespace Argus
                         break;
                     case 1:
                         timeSpace = (int)(destanceOfTime.TotalMinutes / 6);
-                        if ((int)(destanceOfTime.TotalMinutes % 5) > 2)//반올림 작업
-                            timeSpace++;
+                        //if ((int)(destanceOfTime.TotalMinutes % 5) > 2)//반올림 작업
+                            //timeSpace++;
                         break;
                     case 2:
                         timeSpace = (int)(destanceOfTime.TotalHours / 3);
-                        if ((int)(destanceOfTime.TotalHours % 2) > 1)//반올림 작업
-                            timeSpace++;
+                        //if ((int)(destanceOfTime.TotalHours % 2) > 1)//반올림 작업
+                            //timeSpace++;
                         break;
                 }
                 if (timeSpace > 0)
@@ -302,7 +305,7 @@ namespace Argus
                     for (int j = 0; j < timeSpace; j++)
                     {
                         
-                        data.Insert(i + 1, 0);
+                        data.Insert(i + 1, -1);
                         data.RemoveAt(data.Count - 1);
                         time.Insert(i + 1, DateTime.Now);
                         time.RemoveAt(time.Count - 1);
