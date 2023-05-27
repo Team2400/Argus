@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Argus.src;
+using System.Net.Sockets;
+using System.Diagnostics.Eventing.Reader;
 
 namespace Argus
 {
@@ -11,6 +13,7 @@ namespace Argus
     {
         Dictionary<MODE, System.Windows.Forms.Timer> timerDictionary;
         Dictionary<MODE, ArgusIngredient> modeToIngredients;
+        TcpListener listener;
 
         MODE ArgusMode = MODE.SECONDS;
 
@@ -23,6 +26,10 @@ namespace Argus
             List<LiveCharts.WinForms.CartesianChart> chartList = new List<LiveCharts.WinForms.CartesianChart> { cpuChart, memoryChart, diskChart };
 
             chartList.ForEach(chart => ArgusChart.makeChart(chart, labels));
+
+            // listener 의 시작은 별도로 시작되어도 상관없음. netstat -an 으로 port 활성화 확인 가능.
+            listener = new TcpListener(7777);
+            listener.Start();
         }
 
         private void DashBoard_Load(object sender, EventArgs e)
@@ -206,13 +213,19 @@ namespace Argus
 
         private void connectButton_Click(object sender, EventArgs e)//Connect to Remote PC 버튼 클릭 이벤트
         {
-            Parent pr = new Parent();
-            DialogResult dResult = pr.ShowDialog();
+            IpDialog ipDialog = new IpDialog();
+            DialogResult dResult = ipDialog.ShowDialog();
+            string ip = ipDialog.ipAddress;
 
-            if (dResult == DialogResult.Cancel)
+            if (dResult == DialogResult.OK)
             {
-                MessageBox.Show("Cancel");
+                ChildDashboard childDashboard = new ChildDashboard(ip);
             }
+        }
+
+        private void DashBoard_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            listener.Stop();
         }
     }
 }

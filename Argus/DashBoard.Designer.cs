@@ -185,6 +185,7 @@ namespace Argus
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "DashBoard";
             this.Text = "Argus";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.DashBoard_FormClosed);
             this.Load += new System.EventHandler(this.DashBoard_Load);
             this.CpuPannel.ResumeLayout(false);
             this.CpuPannel.PerformLayout();

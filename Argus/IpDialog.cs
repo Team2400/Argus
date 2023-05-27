@@ -15,8 +15,9 @@ using Argus.src;
 
 namespace Argus
 {
-    public partial class Parent : Form
-    {        
+    public partial class IpDialog : Form
+    {
+        /*
         private TcpListener m_listener;
         private Thread m_thread;
         private bool m_bClientOn = false;
@@ -30,19 +31,22 @@ namespace Argus
         public Packet.IntegerClass m_integerClass;
         public Packet.StringClass m_stringClass;
         public Packet.SystemUsage m_usageClass;
-
         //Child폼으로 전달될 데이터 변수
         int ChildI; 
         string ChildS = "";
         SystemUsageDTO ChildU = new SystemUsageDTO();
+        */
 
-        public Parent()
+        public string ipAddress { get; set; }
+
+        public IpDialog()
         {
             InitializeComponent();
         }
 
         private void connectButton_Click(object sender, EventArgs e)//Connect 버튼 클릭 이벤트
         {
+            /*
             this.m_client = new TcpClient();
             try
             {
@@ -57,13 +61,18 @@ namespace Argus
             label.Text = "서버 접속 성공\n";
             this.m_networkstream = this.m_client.GetStream();
             Client();
+            */
+            ipAddress = ipTextBox.Text;
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
         private void cancelButton_Click(object sender, EventArgs e)//Cancel 버튼 클릭 이벤트
         {
-            this.Close();
+            Close();
         }
 
+        /*
         private void Parent_FormClosed(object sender, FormClosedEventArgs e)
         {
             this.m_listener.Stop();
@@ -77,13 +86,17 @@ namespace Argus
                 this.m_networkstream.Close();
             }
         }
+        */
 
+        /*
         private void Parent_Load(object sender, EventArgs e)
         {
             this.m_thread = new Thread(new ThreadStart(RUN));
             this.m_thread.Start();
         }
+        */
 
+        /*
         public void RUN()
         {
             this.m_listener = new TcpListener(7777);
@@ -111,7 +124,9 @@ namespace Argus
                 Server();
             }
         }
+        */
 
+        /*
         public void Send()
         {
             this.m_networkstream.Write(this.sendBuffer, 0, this.sendBuffer.Length);
@@ -122,7 +137,10 @@ namespace Argus
                 this.sendBuffer[i] = 0;
             }
         }
+        */
 
+
+        /*
         public void Server() //데이터 전송 함수
         {
             if (!this.m_bClientOn)
@@ -153,7 +171,9 @@ namespace Argus
             Packet.Serialize(u).CopyTo(this.sendBuffer, 0);
             this.Send();
         }
+        */
 
+        /*
         public void Client() //데이터 송신 함수
         {
             int nRead = 0;
@@ -219,7 +239,7 @@ namespace Argus
                     break;
                 }
             }
-
         }
+        */
     }
 }
