@@ -65,6 +65,12 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Alert.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Alert.Designer.cs">
+      <DependentUpon>Alert.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\ArgusChart.cs" />
     <Compile Include="DashBoard.cs">
       <SubType>Form</SubType>
@@ -78,6 +84,9 @@
     <Compile Include="src\SystemUsageDAO.cs" />
     <Compile Include="src\SystemUsageDTO.cs" />
     <Compile Include="src\SystemUsageManager.cs" />
+    <EmbeddedResource Include="Alert.resx">
+      <DependentUpon>Alert.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DashBoard.resx">
       <DependentUpon>DashBoard.cs</DependentUpon>
     </EmbeddedResource>
