@@ -13,7 +13,8 @@ namespace Argus
     {
         Dictionary<MODE, System.Windows.Forms.Timer> timerDictionary;
         Dictionary<MODE, ArgusIngredient> modeToIngredients;
-        TcpListener listener;
+
+        ConnectionManager connectionManager;
 
         MODE ArgusMode = MODE.SECONDS;
 
@@ -22,14 +23,23 @@ namespace Argus
             InitializeComponent();
 
             List<string> labels = new List<string> { "0", "5", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55", "60" };
-
             List<LiveCharts.WinForms.CartesianChart> chartList = new List<LiveCharts.WinForms.CartesianChart> { cpuChart, memoryChart, diskChart };
 
             chartList.ForEach(chart => ArgusChart.makeChart(chart, labels));
 
-            // listener 의 시작은 별도로 시작되어도 상관없음. netstat -an 으로 port 활성화 확인 가능.
-            listener = new TcpListener(7777);
-            listener.Start();
+            connectionManager = new ConnectionManager();
+            connectionManager.ConnectionEstablished += Connection_Established;
+            connectionManager.StartListener();
+        }
+
+        private void Connection_Established(object sender, ConnectionEstablishedEventArgs e)
+        {
+            var message = "실패";
+            if (e.isConnected)
+            {
+                message = "성공";
+            }
+            MessageBox.Show(message);
         }
 
         private void DashBoard_Load(object sender, EventArgs e)
@@ -219,13 +229,14 @@ namespace Argus
 
             if (dResult == DialogResult.OK)
             {
-                ChildDashboard childDashboard = new ChildDashboard(ip);
+                ChildDashboard childDashboard = new ChildDashboard(connectionManager, ip);
+                childDashboard.ShowDialog();
             }
         }
 
         private void DashBoard_FormClosed(object sender, FormClosedEventArgs e)
         {
-            listener.Stop();
+            connectionManager.StopListener();
         }
     }
 }

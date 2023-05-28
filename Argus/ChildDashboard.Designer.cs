@@ -38,7 +38,7 @@
             // cancelButton
             // 
             this.cancelButton.Location = new System.Drawing.Point(391, 225);
-            this.cancelButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cancelButton.Margin = new System.Windows.Forms.Padding(4);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(107, 34);
             this.cancelButton.TabIndex = 0;
@@ -86,7 +86,7 @@
             this.label4.TabIndex = 4;
             this.label4.Text = "Timestamp";
             // 
-            // Child
+            // ChildDashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -96,9 +96,10 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cancelButton);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.Name = "Child";
+            this.Margin = new System.Windows.Forms.Padding(4);
+            this.Name = "ChildDashboard";
             this.Text = "Form1";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ChildDashboard_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();
 
