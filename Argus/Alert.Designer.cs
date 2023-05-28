@@ -60,6 +60,7 @@
             // 
             // textBoxAlertM
             // 
+            this.textBoxAlertM.Cursor = System.Windows.Forms.Cursors.Default;
             this.textBoxAlertM.Location = new System.Drawing.Point(385, 215);
             this.textBoxAlertM.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBoxAlertM.Multiline = true;
@@ -86,6 +87,7 @@
             this.buttonCancel.TabIndex = 4;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // buttonOk
             // 
