@@ -14,7 +14,7 @@ using PacketClass; //패킷통신 클래스 라이브러리
 using Argus.src;
 
 namespace Argus
-{
+{    
     public partial class IpDialog : Form
     {
         /*
@@ -35,7 +35,7 @@ namespace Argus
         int ChildI; 
         string ChildS = "";
         SystemUsageDTO ChildU = new SystemUsageDTO();
-        */
+        */        
 
         public string ipAddress { get; set; }
 

@@ -11,6 +11,7 @@ namespace Argus.src
         TcpListener tcpListener;
         TcpClient tcpClient;
         NetworkStream stream;
+        SystemUsageDTO[] usageArray; //ChildDashboard폼으로 전달될 데이터 변수
 
         public event EventHandler<ConnectionEstablishedEventArgs> ConnectionEstablished;
 
@@ -25,7 +26,10 @@ namespace Argus.src
 
         public void StartListener() { tcpListener.Start(); }
 
-        public void StopListener() { if (tcpListener != null) tcpListener.Stop(); }
+        public void StopListener() 
+        {
+            if (tcpListener != null) tcpListener.Stop(); 
+        }
 
         public void AcceptConnectionAndStartSendData()
         {
@@ -36,16 +40,25 @@ namespace Argus.src
                 byte[] sendBuffer = new byte[1024 * 4];
                 var stream = client.GetStream();
 
-                //SystemUsage클래스 데이터 전송
-                Packet.SystemUsage u = new Packet.SystemUsage();
+                //SystemUsage클래스 배열 데이터 전송
+                Packet.SystemUsageDTOArray a = new Packet.SystemUsageDTOArray();
+                a.Type = (int)PacketType.ClassArray;
+                a.arrSize = 12;
+                a.Arr = new Packet.SystemUsageDTO[a.arrSize];
+                double b = 1.1;
+                double c = 1.2;
+                double d = 1.3;
+                for (int i = 0; i < a.Arr.Length; i++)
+                {
+                    a.Arr[i] = new Packet.SystemUsageDTO();
+                    a.Arr[i].CPU = b;
+                    a.Arr[i].Memory = c;
+                    a.Arr[i].Disk = d;
+                    a.Arr[i].Timestamp = DateTime.Now;
+                    b += 1; c += 1; d += 1;
+                }
 
-                u.Type = (int)PacketType.클래스;
-                u.CPU = 1.1;
-                u.Memory = 2.2;
-                u.Disk = 3.3;
-                u.Timestamp = DateTime.Now;
-
-                Packet.Serialize(u).CopyTo(sendBuffer, 0);
+                Packet.Serialize(a).CopyTo(sendBuffer, 0);
 
                 stream.Write(sendBuffer, 0, sendBuffer.Length);
                 stream.Flush();
@@ -80,13 +93,13 @@ namespace Argus.src
             return;
         }
 
-        public Packet.SystemUsage ReadDataFromStream()
+        public SystemUsageDTO[] ReadDataFromStream()
         {
             int nRead = 0;
             int n = 0;
-            const int dataNum = 3; //전송받는 데이터의 개수
+            const int dataNum = 1; //전송받는 데이터의 개수
             byte[] readBuffer = new byte[1024 * 4];
-            Packet.SystemUsage usageFromStream = null;
+            Packet.SystemUsageDTOArray usageFromStream = null;
 
             while (isConnected)
             {
@@ -104,9 +117,18 @@ namespace Argus.src
 
                 switch ((int)packet.Type)
                 {
-                    case (int)PacketType.클래스:
+                    case (int)PacketType.ClassArray:
                         {
-                            usageFromStream = (Packet.SystemUsage)Packet.Desserialize(readBuffer);
+                            usageFromStream = (Packet.SystemUsageDTOArray)Packet.Desserialize(readBuffer);
+                            usageArray = new SystemUsageDTO[usageFromStream.arrSize];
+                            for (int i = 0; i < usageArray.Length; i++)
+                            {
+                                usageArray[i] = new SystemUsageDTO();
+                                usageArray[i].CPU = usageFromStream.Arr[i].CPU;
+                                usageArray[i].Memory = usageFromStream.Arr[i].Memory;
+                                usageArray[i].Disk = usageFromStream.Arr[i].Disk;
+                                usageArray[i].Timestamp = usageFromStream.Arr[i].Timestamp;
+                            }
                             break;
                         }
                 }
@@ -115,8 +137,7 @@ namespace Argus.src
                     break;
                 }
             }
-
-            return usageFromStream;
+            return usageArray;
         }
 
         public void CloseConnection() { if (tcpClient != null) tcpClient.Close(); }

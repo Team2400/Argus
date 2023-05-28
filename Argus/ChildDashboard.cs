@@ -28,16 +28,16 @@ namespace Argus
             {
                 connectionManager.TryConnect(ip);
 
-                Packet.SystemUsage usage = connectionManager.ReadDataFromStream();
+               SystemUsageDTO[] usage = connectionManager.ReadDataFromStream();
 
                 if (usage != null)
                 {
                     Invoke(new MethodInvoker(delegate ()
                     {
-                        label1.Text = usage.CPU.ToString();
-                        label2.Text = usage.Memory.ToString();
-                        label3.Text = usage.Disk.ToString();
-                        label4.Text = usage.Timestamp.ToString();
+                        for (int i = 0; i < usage.Length; i++)
+                        {
+                            textBox1.Text += usage[i].CPU + "/" + usage[i].Memory + "/" + usage[i].Disk + "/" + usage[i].Timestamp + "\r\n";
+                        }
                     }));
                 }
             });
@@ -54,7 +54,7 @@ namespace Argus
         }
 
         private void button1_Click(object sender, EventArgs e)//Cancel 버튼 클릭 이벤트
-        {
+        {            
             Close();
         }
 
