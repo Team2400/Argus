@@ -38,6 +38,10 @@ namespace Argus
             if (e.isConnected)
             {
                 message = "성공";
+                Task.Run(() =>
+                {
+                    connectionManager.AcceptConnectionAndStartSendData();
+                });
             }
             MessageBox.Show(message);
         }
