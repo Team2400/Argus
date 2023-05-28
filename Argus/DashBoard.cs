@@ -193,6 +193,21 @@ namespace Argus
                     return "Sec";
             }
         }
+
+        private void buttonCPU_Click(object sender, EventArgs e)//image는 background로 넣고 layout을 zoom으로
+        {
+
+        }
+
+        private void buttonMEM_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonDISK_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 
