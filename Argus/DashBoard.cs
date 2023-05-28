@@ -194,24 +194,31 @@ namespace Argus
             }
         }
 
-        private void buttonCPU_Click(object sender, EventArgs e)//image는 background로 넣고 layout을 zoom으로
+        private void something_changed(object obj, EventArgs e)
         {
-            Alert alertC = new Alert();
-            DialogResult dresult = alertC.ShowDialog();
-            //if(dresult==DialogResult.Cancel)
-            //{
-            //    MessageBox.Show("Cancel");
-            //}
+            //여기의 임계값을 alert의 threshold로 바꿈
+        }
+        private void buttonCPU_Click(object sender, EventArgs e)//image는 background로 넣고 layout을 zoom으로
+        {//modaless로
+            Alert al= new Alert();
+            al.Owner = this;
+            al.Changed += new EventHandler(something_changed);
+            al.Show();
+            
         }
 
         private void buttonMEM_Click(object sender, EventArgs e)
         {
-            Alert alertM = new Alert();
+            Alert al = new Alert();
+            al.Owner = this;
+            al.Show();
         }
 
         private void buttonDISK_Click(object sender, EventArgs e)
         {
-            Alert alertD = new Alert();
+            Alert al = new Alert();
+            al.Owner = this;
+            al.Show();
         }
     }
 }
