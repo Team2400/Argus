@@ -103,32 +103,6 @@ namespace Argus
             mList = dataModulation(mList, timeList, count);
             dList = dataModulation(dList, timeList, count);
 
-            /*TimeSpan destanceOfTime = TimeSpan.Zero;
-            int timeSpace = 0;
-
-            for(int i = 0; i < count - 1; i++)
-            {
-                destanceOfTime = timeList[i] - timeList[i+1];
-                timeSpace = (int)(destanceOfTime.TotalSeconds / 6);//시간 차이를 계산하여 6초 이상이면 그 만큼 0을 삽입
-                if (timeSpace > 0)
-                {
-                    for(int j = 0; j < timeSpace; j++) 
-                    {
-                        dList.Insert(i + 1, 0);
-                        dList.RemoveAt(dList.Count - 1);
-                        cList.Insert(i + 1, 0);
-                        cList.RemoveAt(cList.Count - 1);
-                        mList.Insert(i + 1, 0);
-                        mList.RemoveAt(mList.Count - 1);
-                        timeList.Insert(i + 1, DateTime.Now);
-                        timeList.RemoveAt(timeList.Count - 1);
-                        i++;// 여기서 data추가 량이 많아지면 오류 발생
-                        if (i == count - 1)//따라서 0 삽입의 상한을 지정한다
-                            break;
-                    }
-                }
-            }*/
-
             ArgusChart.updateChart(cpuChart, cList);//chart update 이하 동일함
             ArgusChart.updateChart(memoryChart, mList);
             ArgusChart.updateChart(diskChart, dList);
@@ -188,32 +162,6 @@ namespace Argus
             mList = dataModulation(mList, timeList, count);
             dList = dataModulation(dList, timeList, count);
 
-            /*TimeSpan destanceOfTime = TimeSpan.Zero;
-            int timeSpace = 0;
-
-            for(int i = 0; i < count - 1; i++)
-            {
-                destanceOfTime = timeList[i] - timeList[i+1];
-                timeSpace = (int)(destanceOfTime.TotalSeconds / 6);//시간 차이를 계산하여 6초 이상이면 그 만큼 0을 삽입
-                if (timeSpace > 0)
-                {
-                    for(int j = 0; j < timeSpace; j++) 
-                    {
-                        dList.Insert(i + 1, 0);
-                        dList.RemoveAt(dList.Count - 1);
-                        cList.Insert(i + 1, 0);
-                        cList.RemoveAt(cList.Count - 1);
-                        mList.Insert(i + 1, 0);
-                        mList.RemoveAt(mList.Count - 1);
-                        timeList.Insert(i + 1, DateTime.Now);
-                        timeList.RemoveAt(timeList.Count - 1);
-                        i++;// 여기서 data추가 량이 많아지면 오류 발생
-                        if (i == count - 1)//따라서 0 삽입의 상한을 지정한다
-                            break;
-                    }
-                }
-            }*/
-
             ArgusChart.updateChart(cpuChart, cList);//chart update 이하 동일함
             ArgusChart.updateChart(memoryChart, mList);
             ArgusChart.updateChart(diskChart, dList);
@@ -242,7 +190,6 @@ namespace Argus
                 }
             }
             
-
             List<double> cList = new List<double>();//CPU chart update를 위한 list 이하 동일함
             List<double> mList = new List<double>();
             List<double> dList = new List<double>();
@@ -273,32 +220,6 @@ namespace Argus
             mList = dataModulation(mList, timeList, count);
             dList = dataModulation(dList, timeList, count);
 
-            /*TimeSpan destanceOfTime = TimeSpan.Zero;
-            int timeSpace = 0;
-
-            for(int i = 0; i < count - 1; i++)
-            {
-                destanceOfTime = timeList[i] - timeList[i+1];
-                timeSpace = (int)(destanceOfTime.TotalSeconds / 6);//시간 차이를 계산하여 6초 이상이면 그 만큼 0을 삽입
-                if (timeSpace > 0)
-                {
-                    for(int j = 0; j < timeSpace; j++) 
-                    {
-                        dList.Insert(i + 1, 0);
-                        dList.RemoveAt(dList.Count - 1);
-                        cList.Insert(i + 1, 0);
-                        cList.RemoveAt(cList.Count - 1);
-                        mList.Insert(i + 1, 0);
-                        mList.RemoveAt(mList.Count - 1);
-                        timeList.Insert(i + 1, DateTime.Now);
-                        timeList.RemoveAt(timeList.Count - 1);
-                        i++;// 여기서 data추가 량이 많아지면 오류 발생
-                        if (i == count - 1)//따라서 0 삽입의 상한을 지정한다
-                            break;
-                    }
-                }
-            }*/
-
             ArgusChart.updateChart(cpuChart, cList);//chart update 이하 동일함
             ArgusChart.updateChart(memoryChart, mList);
             ArgusChart.updateChart(diskChart, dList);
@@ -326,13 +247,9 @@ namespace Argus
                         break;
                     case 1:
                         timeSpace = (int)(destanceOfTime.TotalMinutes / 6);
-                        //if ((int)(destanceOfTime.TotalMinutes % 5) > 2)//반올림 작업
-                            //timeSpace++;
                         break;
                     case 2:
                         timeSpace = (int)(destanceOfTime.TotalHours / 3);
-                        //if ((int)(destanceOfTime.TotalHours % 2) > 1)//반올림 작업
-                            //timeSpace++;
                         break;
                 }
                 if (timeSpace > 0)
