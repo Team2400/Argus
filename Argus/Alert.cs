@@ -20,7 +20,8 @@ namespace Argus
         private void buttonOk_Click(object sender, EventArgs e)
         {
             DashBoard ds = (DashBoard)Owner;
-            ds.message = textBoxThresH.ToString();
+            ds.thres = Convert.ToInt32(textBoxThresH.Text);//int로 형변환
+            ds.message = textBoxAlertM.ToString();
             this.Close();
         }
 
