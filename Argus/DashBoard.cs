@@ -30,7 +30,7 @@ namespace Argus
         private System.Windows.Forms.Timer timerMinute;
         private System.Windows.Forms.Timer timerHour;
         private System.Windows.Forms.Timer timerDay;
-        public int checkTimeInterval = 2;//어떤 단위 시간으로 chart를 update할 지 결정하는 변수
+        public int checkTimeInterval = 0;//어떤 단위 시간으로 chart를 update할 지 결정하는 변수
 
         public DashBoard()
         {
@@ -65,15 +65,8 @@ namespace Argus
             Timer_TickHour(sender, e);
             Timer_TickMInute(sender, e);
         }
-
-        private void Timer_TickMInute(object sender, EventArgs e)
+        private void updateWindows(SystemUsageDAO DAO)
         {
-            systemUsageDAOMinute.insertDB(
-                SystemUsageManager.getCpuUsage(),
-                (int)SystemUsageManager.getMemUsage(),
-                (int)SystemUsageManager.getDiskUsage()
-            );//data insert at DB
-
             List<double> cList = new List<double>();//CPU chart update를 위한 list 이하 동일함
             List<double> mList = new List<double>();
             List<double> dList = new List<double>();
@@ -81,18 +74,16 @@ namespace Argus
             List<DateTime> timeList = new List<DateTime>();
 
             IEnumerable<SystemUsageDTO> data;
-            int count = systemUsageDAOMinute.GetCollection().Count() - 1;//현재까지 저장된 data의 개수이다.
+            int count = DAO.GetCollection().Count() - 1;//현재까지 저장된 data의 개수이다.
 
             if (count >= 13)//가져올 data의 상한을 정한다.
                 count = 13;
-            
-            data = systemUsageDAOMinute.selectSysUsage(count);//data를 위 count만큼 불러온다
 
-            if (checkTimeInterval != 0)
-                return;
+            data = DAO.selectSysUsage(count);//data를 위 count만큼 불러온다
+
             //data 가공 시작
             foreach (var i in data)//data에 대한 list item 추가
-            {   
+            {
                 cList.Add(i.CPU);
                 mList.Add(i.Memory);
                 dList.Add(i.Disk);
@@ -106,6 +97,19 @@ namespace Argus
             ArgusChart.updateChart(cpuChart, cList);//chart update 이하 동일함
             ArgusChart.updateChart(memoryChart, mList);
             ArgusChart.updateChart(diskChart, dList);
+        }
+        private void Timer_TickMInute(object sender, EventArgs e)
+        {
+            systemUsageDAOMinute.insertDB(
+                SystemUsageManager.getCpuUsage(),
+                (int)SystemUsageManager.getMemUsage(),
+                (int)SystemUsageManager.getDiskUsage()
+            );//data insert at DB
+
+            if (checkTimeInterval != 0)
+                return;
+
+            updateWindows(systemUsageDAOMinute);
         }
         private void Timer_TickHour(object sender, EventArgs e)
         {
@@ -131,40 +135,10 @@ namespace Argus
                 }
             }
 
-            
-
-            List<double> cList = new List<double>();//CPU chart update를 위한 list 이하 동일함
-            List<double> mList = new List<double>();
-            List<double> dList = new List<double>();
-
-            List<DateTime> timeList = new List<DateTime>();
-
-            IEnumerable<SystemUsageDTO> data;
-            int count = systemUsageDAOHour.GetCollection().Count() - 1;//현재까지 저장된 data의 개수이다.
-
-            if (count >= 13)//가져올 data의 상한을 정한다.
-                count = 13;
-
-            data = systemUsageDAOHour.selectSysUsage(count);//data를 위 count만큼 불러온다
-
             if (checkTimeInterval != 1)
                 return;
-            //data 가공 시작
-            foreach (var i in data)//data에 대한 list item 추가
-            {
-                cList.Add(i.CPU);
-                mList.Add(i.Memory);
-                dList.Add(i.Disk);
-                timeList.Add(i.Timestamp);
-            }
 
-            cList = dataModulation(cList, timeList, count);
-            mList = dataModulation(mList, timeList, count);
-            dList = dataModulation(dList, timeList, count);
-
-            ArgusChart.updateChart(cpuChart, cList);//chart update 이하 동일함
-            ArgusChart.updateChart(memoryChart, mList);
-            ArgusChart.updateChart(diskChart, dList);
+            updateWindows(systemUsageDAOHour);
         }
         private void Timer_TickDay(object sender, EventArgs e)
         {
@@ -189,40 +163,11 @@ namespace Argus
                     );//data insert at DB
                 }
             }
-            
-            List<double> cList = new List<double>();//CPU chart update를 위한 list 이하 동일함
-            List<double> mList = new List<double>();
-            List<double> dList = new List<double>();
-
-            List<DateTime> timeList = new List<DateTime>();
-
-            IEnumerable<SystemUsageDTO> data;
-            int count = systemUsageDAODay.GetCollection().Count() - 1;//현재까지 저장된 data의 개수이다.
-
-            if (count >= 13)//가져올 data의 상한을 정한다.
-                count = 13;
-
-            data = systemUsageDAODay.selectSysUsage(count);//data를 위 count만큼 불러온다
 
             if (checkTimeInterval != 2)
                 return;
 
-            //data 가공 시작
-            foreach (var i in data)//data에 대한 list item 추가
-            {
-                cList.Add(i.CPU);
-                mList.Add(i.Memory);
-                dList.Add(i.Disk);
-                timeList.Add(i.Timestamp);
-            }
-
-            cList = dataModulation(cList, timeList, count);
-            mList = dataModulation(mList, timeList, count);
-            dList = dataModulation(dList, timeList, count);
-
-            ArgusChart.updateChart(cpuChart, cList);//chart update 이하 동일함
-            ArgusChart.updateChart(memoryChart, mList);
-            ArgusChart.updateChart(diskChart, dList);
+            updateWindows(systemUsageDAODay);
         }
 
         public List<double> dataModulation(List<double> data, List<DateTime> timeList, int count)//data는 가공할 data가 담겨있는 List, timeList는 data의 시간 List, count는 data의 최대 원소 개수
