@@ -199,7 +199,9 @@ namespace Argus
 
         public string message;//messagebox로 표시할 message.
                               //alert에서 참조할 수 있게 전역변수로
+        public int thres=0;
         string alertCPU,alertMemory,alertDisk;
+        int thresholdCpu, thresholdDisk, thresholdMemory;
 
         public void Button_Click(object sender, EventArgs e)
         {
@@ -214,14 +216,17 @@ namespace Argus
                 if (clickedButton == buttonCPU)
                 {
                     alertCPU = message;
+                    thresholdCpu = thres;
                 }
                 else if (clickedButton == buttonDISK)
                 {
                     alertDisk = message;
+                    thresholdDisk = thres;
                 }
                 else if (clickedButton == buttonMEM)
                 {
                    alertMemory= message;
+                    thresholdMemory = thres;
                 }
             }
         }
