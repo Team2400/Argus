@@ -30,10 +30,10 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBoxAlertM = new System.Windows.Forms.TextBox();
             this.textBoxThresH = new System.Windows.Forms.TextBox();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonOk = new System.Windows.Forms.Button();
+            this.textBoxAlertM = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -58,30 +58,19 @@
             this.label2.TabIndex = 1;
             this.label2.Text = "Alert Message";
             // 
-            // textBoxAlertM
-            // 
-            this.textBoxAlertM.Cursor = System.Windows.Forms.Cursors.Default;
-            this.textBoxAlertM.Location = new System.Drawing.Point(385, 215);
-            this.textBoxAlertM.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.textBoxAlertM.Multiline = true;
-            this.textBoxAlertM.Name = "textBoxAlertM";
-            this.textBoxAlertM.ReadOnly = true;
-            this.textBoxAlertM.Size = new System.Drawing.Size(509, 206);
-            this.textBoxAlertM.TabIndex = 2;
-            // 
             // textBoxThresH
             // 
-            this.textBoxThresH.Location = new System.Drawing.Point(385, 83);
-            this.textBoxThresH.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxThresH.Location = new System.Drawing.Point(359, 83);
+            this.textBoxThresH.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxThresH.Multiline = true;
             this.textBoxThresH.Name = "textBoxThresH";
-            this.textBoxThresH.Size = new System.Drawing.Size(509, 54);
+            this.textBoxThresH.Size = new System.Drawing.Size(510, 55);
             this.textBoxThresH.TabIndex = 3;
             // 
             // buttonCancel
             // 
             this.buttonCancel.Location = new System.Drawing.Point(466, 477);
-            this.buttonCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonCancel.Margin = new System.Windows.Forms.Padding(4);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(196, 54);
             this.buttonCancel.TabIndex = 4;
@@ -92,7 +81,7 @@
             // buttonOk
             // 
             this.buttonOk.Location = new System.Drawing.Point(699, 477);
-            this.buttonOk.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonOk.Margin = new System.Windows.Forms.Padding(4);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(196, 54);
             this.buttonOk.TabIndex = 5;
@@ -100,20 +89,28 @@
             this.buttonOk.UseVisualStyleBackColor = true;
             this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
             // 
+            // textBoxAlertM
+            // 
+            this.textBoxAlertM.Location = new System.Drawing.Point(359, 215);
+            this.textBoxAlertM.Multiline = true;
+            this.textBoxAlertM.Name = "textBoxAlertM";
+            this.textBoxAlertM.Size = new System.Drawing.Size(510, 200);
+            this.textBoxAlertM.TabIndex = 6;
+            // 
             // Alert
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(17F, 29F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.ClientSize = new System.Drawing.Size(974, 610);
+            this.Controls.Add(this.textBoxAlertM);
             this.Controls.Add(this.buttonOk);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.textBoxThresH);
-            this.Controls.Add(this.textBoxAlertM);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Font = new System.Drawing.Font("굴림", 11F);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Alert";
             this.Text = "Alert";
             this.ResumeLayout(false);
@@ -125,9 +122,9 @@
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBoxAlertM;
         private System.Windows.Forms.TextBox textBoxThresH;
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Button buttonOk;
+        private System.Windows.Forms.TextBox textBoxAlertM;
     }
 }
