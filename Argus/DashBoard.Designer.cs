@@ -114,7 +114,7 @@
             this.buttonCPU.Size = new System.Drawing.Size(40, 40);
             this.buttonCPU.TabIndex = 7;
             this.buttonCPU.UseVisualStyleBackColor = true;
-            this.buttonCPU.Click += new System.EventHandler(this.buttonCPU_Click);
+            this.buttonCPU.Click += new System.EventHandler(this.Button_Click);
             // 
             // panel2
             // 
@@ -147,7 +147,7 @@
             this.buttonMEM.Size = new System.Drawing.Size(40, 40);
             this.buttonMEM.TabIndex = 8;
             this.buttonMEM.UseVisualStyleBackColor = true;
-            this.buttonMEM.Click += new System.EventHandler(this.buttonMEM_Click);
+            this.buttonMEM.Click += new System.EventHandler(this.Button_Click);
             // 
             // panel3
             // 
@@ -180,7 +180,7 @@
             this.buttonDISK.Size = new System.Drawing.Size(40, 40);
             this.buttonDISK.TabIndex = 9;
             this.buttonDISK.UseVisualStyleBackColor = true;
-            this.buttonDISK.Click += new System.EventHandler(this.buttonDISK_Click);
+            this.buttonDISK.Click += new System.EventHandler(this.Button_Click);
             // 
             // DashBoard
             // 

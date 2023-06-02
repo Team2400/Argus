@@ -113,6 +113,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Alert";
             this.Text = "Alert";
+            this.Load += new System.EventHandler(this.Alert_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
