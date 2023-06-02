@@ -12,28 +12,15 @@ namespace Argus
 {
     public partial class Alert : Form
     {
-        private DashBoard ds;
-
         public Alert()
         {
             InitializeComponent();
         }
 
-        public Alert(DashBoard dash)
-        {
-            InitializeComponent();
-            ds = dash;
-            ds.buttonCPU_Click += buttonOk_Click;
-        }
-
-        private void Alert_Load(object sender, EventArgs e)
-        {
-            ds.buttonCPU_Click+= buttonOk_Click;
-        }
         private void buttonOk_Click(object sender, EventArgs e)
         {
-            ds.setMessage(textBoxThresH.Text,textBoxAlertM.Text);
-
+            DashBoard ds = (DashBoard)Owner;
+            ds.message = textBoxThresH.ToString();
             this.Close();
         }
 

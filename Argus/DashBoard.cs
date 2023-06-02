@@ -197,45 +197,36 @@ namespace Argus
 
         /// ///////////////////////////////////////////////////////////////////////////
 
-        string message;//messagebox로 표시할 message
-        string thres;//child에서 받아 온 각 임계점
+        public string message;//messagebox로 표시할 message.
+                              //alert에서 참조할 수 있게 전역변수로
+        string alertCPU,alertMemory,alertDisk;
 
-        public void setMessage(string threshold, string alertmessage)//child에서 받아 온 값으로 대입해 주는 함수
+        public void Button_Click(object sender, EventArgs e)
         {
-            thres = threshold;
-            message = alertmessage;
-        }
+            Alert al = new Alert();
+            al.Owner = this;//자식 폼의 owner를 이 폼으로.
+            al.Show();
 
-        //sender에서 cpu,memory, disk인지 확인해서 하나의 함수로
-
-        public void buttonCPU_Click(object sender, EventArgs e)//image는 background로 넣고 layout을 zoom으로
-        {
-            Alert cpu= new Alert(this);
-            cpu.Owner = this;//자식 폼의 owner를 이 폼으로.
-            cpu.Show();
-        }
-
-        private void Button_Click(object sender, EventArgs e)
-        {
             Button clickedButton = sender as Button; // sender를 Button 타입으로 형변환
 
             if (clickedButton != null)
             {
                 if (clickedButton == buttonCPU)
                 {
-                   
+                    alertCPU = message;
                 }
                 else if (clickedButton == buttonDISK)
                 {
-                    
+                    alertDisk = message;
                 }
                 else if (clickedButton == buttonMEM)
                 {
-                   
+                   alertMemory= message;
                 }
             }
         }
-    }
+
+        
     }
 }
 
