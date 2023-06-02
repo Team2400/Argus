@@ -194,48 +194,48 @@ namespace Argus
                     return "Sec";
             }
         }
-        
-        //Alert 자식 창에서 데이터를 수신할 전역변수 선언
-        
-        static public string receivedCPU,receivedDISK,receivedMEM;//각각의 message
-        static public string tC, tD, tM;//각각의 threshold
+
+        /// ///////////////////////////////////////////////////////////////////////////
+
+        string message;//messagebox로 표시할 message
+        string thres;//child에서 받아 온 각 임계점
+
+        public void setMessage(string threshold, string alertmessage)//child에서 받아 온 값으로 대입해 주는 함수
+        {
+            thres = threshold;
+            message = alertmessage;
+        }
 
         //sender에서 cpu,memory, disk인지 확인해서 하나의 함수로
-        private void buttonCPU_Click(object sender, EventArgs e)//image는 background로 넣고 layout을 zoom으로
-        {//modaless로
-            Alert cpu= new Alert();
+
+        public void buttonCPU_Click(object sender, EventArgs e)//image는 background로 넣고 layout을 zoom으로
+        {
+            Alert cpu= new Alert(this);
             cpu.Owner = this;//자식 폼의 owner를 이 폼으로.
-
-            if (cpu.ShowDialog() == DialogResult.OK)//바꿀 부분
-            {
-                MessageBox.Show(receivedCPU);
-                //이걸 이제 usage 를 추출할 때 마다 검사하여 해당 값보다 클 시 띄움.
-            }
+            cpu.Show();
         }
 
-        private void buttonMEM_Click(object sender, EventArgs e)
+        private void Button_Click(object sender, EventArgs e)
         {
-            Alert mem = new Alert();
-            mem.Owner = this;
-            
-            if (mem.ShowDialog() == DialogResult.OK)//바꿀 부분
+            Button clickedButton = sender as Button; // sender를 Button 타입으로 형변환
+
+            if (clickedButton != null)
             {
-                MessageBox.Show(receivedMEM);
-                //이걸 이제 usage 를 추출할 때 마다 검사하여 해당 값보다 클 시 띄움.
+                if (clickedButton == buttonCPU)
+                {
+                   
+                }
+                else if (clickedButton == buttonDISK)
+                {
+                    
+                }
+                else if (clickedButton == buttonMEM)
+                {
+                   
+                }
             }
         }
-
-        private void buttonDISK_Click(object sender, EventArgs e)
-        {
-            Alert disk = new Alert();
-            disk.Owner = this;
-            if (disk.ShowDialog() == DialogResult.OK)//바꿀 부분
-            {
-                MessageBox.Show(receivedDISK);
-                //이걸 이제 usage 를 추출할 때 마다 검사하여 해당 값보다 클 시 띄움.
-            }
-
-        }
+    }
     }
 }
 
