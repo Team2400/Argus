@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Argus.src
 {
-    internal class SystemUsageDAO
+    public class SystemUsageDAO
     {
         private LiteDatabase db;
         private ILiteCollection<SystemUsageDTO> collection;
 
         // 생성자로 db 파일이름과 table 이름을 받아 초기화 한다.
-        public SystemUsageDAO(string fileName, string tableName)
+        public SystemUsageDAO(string fileName)
         {
             try
             {
