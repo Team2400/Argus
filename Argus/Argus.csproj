@@ -74,6 +74,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\ArgusIngredient.cs" />
     <Compile Include="src\SystemUsageDAO.cs" />
     <Compile Include="src\SystemUsageDTO.cs" />
     <Compile Include="src\SystemUsageManager.cs" />
