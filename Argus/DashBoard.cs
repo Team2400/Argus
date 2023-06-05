@@ -1,36 +1,18 @@
 ﻿using LiteDB;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Threading;
-
-using System.IO;
-
-using System.Windows.Media;
-using Brushes = System.Windows.Media.Brushes;
 using Argus.src;
-using System.Windows.Media.Animation;
 
 namespace Argus
 {
     public partial class DashBoard : Form
     {
-        private SystemUsageDAO systemUsageDAOMinute;
-        private SystemUsageDAO systemUsageDAOHour;
-        private SystemUsageDAO systemUsageDAODay;
-        public int TIME_INTERVAL_MINUTE = 5 * 1000; //5초
-        public int TIME_INTERVAL_HOUR = 5 * 60 * 1000; //5분
-        public int TIME_INTERVAL_DAY = 2 * 60 * 60* 1000; //2시간
-        private System.Windows.Forms.Timer timerMinute;
-        private System.Windows.Forms.Timer timerHour;
-        private System.Windows.Forms.Timer timerDay;
-        public int checkTimeInterval = 0;//어떤 단위 시간으로 chart를 update할 지 결정하는 변수
+        Dictionary<MODE, System.Windows.Forms.Timer> timerDictionary;
+        Dictionary<MODE, ArgusIngredient> modeToIngredients;
+
+        MODE ArgusMode = MODE.SECONDS;
 
         public DashBoard()
         {
@@ -45,26 +27,26 @@ namespace Argus
 
         private void DashBoard_Load(object sender, EventArgs e)
         {
-            systemUsageDAOMinute = new SystemUsageDAO("ArgusDBMinute.db", "SystemUsage");
-            systemUsageDAOHour = new SystemUsageDAO("ArgusDBHour.db", "SystemUsage");
-            systemUsageDAODay = new SystemUsageDAO("ArgusDBDay.db", "SystemUsage");
+            // MODE 값, 초단위, 분단위, 시간단위 를 받아 
+            modeToIngredients = ModeToIngredientMapperFactory.Create();
+            timerDictionary = new Dictionary<MODE, System.Windows.Forms.Timer>();
 
-            timerMinute = new System.Windows.Forms.Timer();
-            timerHour = new System.Windows.Forms.Timer();
-            timerDay = new System.Windows.Forms.Timer();
-            timerMinute.Interval = TIME_INTERVAL_MINUTE;//Time Interval
-            timerMinute.Tick += Timer_TickMInute;// 위 시간에 한번씩 Timer_Tick 호출
-            timerMinute.Start();
-            timerHour.Interval = TIME_INTERVAL_HOUR;//Time Interval
-            timerHour.Tick += Timer_TickHour;// 위 시간에 한번씩 Timer_Tick 호출
-            timerHour.Start();
-            timerDay.Interval = TIME_INTERVAL_DAY;//Time Interval
-            timerDay.Tick += Timer_TickDay;// 위 시간에 한번씩 Timer_Tick 호출
-            timerDay.Start();
-            Timer_TickDay(sender, e);
-            Timer_TickHour(sender, e);
-            Timer_TickMInute(sender, e);
+            timerDictionary.Add(MODE.SECONDS, new System.Windows.Forms.Timer());
+            timerDictionary.Add(MODE.MINUTES, new System.Windows.Forms.Timer());
+            timerDictionary.Add(MODE.HOURS, new System.Windows.Forms.Timer());
+
+            foreach (KeyValuePair<MODE, System.Windows.Forms.Timer> kvp in timerDictionary)
+            {
+
+                kvp.Value.Tag = getTimerTag(kvp.Key);
+                kvp.Value.Interval = modeToIngredients[kvp.Key].interval;
+                kvp.Value.Tick += Timer_Work;
+                kvp.Value.Start();
+
+                Timer_Work(kvp.Value, e);
+            }
         }
+
         private void updateWindows(SystemUsageDAO DAO)
         {
             List<double> cList = new List<double>();//CPU chart update를 위한 list 이하 동일함
@@ -98,82 +80,66 @@ namespace Argus
             ArgusChart.updateChart(memoryChart, mList);
             ArgusChart.updateChart(diskChart, dList);
         }
-        private void Timer_TickMInute(object sender, EventArgs e)
-        {
-            systemUsageDAOMinute.insertDB(
-                SystemUsageManager.getCpuUsage(),
-                (int)SystemUsageManager.getMemUsage(),
-                (int)SystemUsageManager.getDiskUsage()
-            );//data insert at DB
 
-            if (checkTimeInterval != 0)
-                return;
-
-            updateWindows(systemUsageDAOMinute);
-        }
-        private void Timer_TickHour(object sender, EventArgs e)
+        // 시간에 따라 주기적으로 호출되는 함수.
+        // 시스템에서 값을 뽑아와서 db 에 넣고, 적절히 가공 후 chart 에 update 까지 한 cycle 을 구동한다.
+        private void Timer_Work(object sender, EventArgs e)
         {
-            if (systemUsageDAOHour.GetCollection().Count() == 0)//기존에 data가 없을 시 무조건 insert
+            var timerSender = sender as System.Windows.Forms.Timer;
+            SystemUsageDAO dao = modeToIngredients[ArgusMode].usageDAO;
+
+            // data 가 하나라도 없는 경우에는 if 문을 스킵하여 data 를 넣고 updateChart 하도록 한다.
+            // 하나라도 있는 경우에는 마지막 아이템으로 부터 시간차이를 구해서 만일 값을 넣을 때가 아니라면 insert 하는 과정을 넘기도록 한다.
+            // TODO 아래 read 를 거치느라 시간이 늦어짐. 개선필요!
+            if (dao.GetCollection().Count() != 0)
             {
-                systemUsageDAOHour.insertDB(
-                SystemUsageManager.getCpuUsage(),
-                (int)SystemUsageManager.getMemUsage(),
-                (int)SystemUsageManager.getDiskUsage()
-                );//data insert at DB
-            }
-            else
-            {
-                DateTime lastData = systemUsageDAOHour.selectSysUsage(1).First().Timestamp;
+                DateTime lastData = dao.selectSysUsage(1).First().Timestamp;
                 TimeSpan t = DateTime.Now - lastData;
-                if (t.TotalMinutes >= 5)//가장 최근 data보다 5분 이상 차이가 나면 data를 insert한다.
+                bool shouldUpdateOrNot = false;
+
+                switch (ArgusMode) 
                 {
-                    systemUsageDAOHour.insertDB(
-                    SystemUsageManager.getCpuUsage(),
-                    (int)SystemUsageManager.getMemUsage(),
-                    (int)SystemUsageManager.getDiskUsage()
-                    );//data insert at DB
+                    case MODE.SECONDS:
+                        shouldUpdateOrNot =  t.TotalSeconds < 5; // 5초
+                        break;
+                    case MODE.MINUTES:
+                        shouldUpdateOrNot = t.TotalMinutes < 5; // 5분
+                        break;
+                    case MODE.HOURS:
+                        shouldUpdateOrNot = t.TotalHours < 1; // 1시간
+                        break;
+                }
+
+                if (shouldUpdateOrNot)
+                {
+                    return;
                 }
             }
 
-            if (checkTimeInterval != 1)
-                return;
-
-            updateWindows(systemUsageDAOHour);
-        }
-        private void Timer_TickDay(object sender, EventArgs e)
-        {
-            if (systemUsageDAODay.GetCollection().Count() == 0)
-            {
-                systemUsageDAODay.insertDB(
+            dao.insertDB(
                 SystemUsageManager.getCpuUsage(),
                 (int)SystemUsageManager.getMemUsage(),
                 (int)SystemUsageManager.getDiskUsage()
-                );//data insert at DB
-            }
-            else
+            ); //data insert at DB
+
+            if ((string)timerSender.Tag != getTimerTag(ArgusMode))
             {
-                DateTime lastData = systemUsageDAODay.selectSysUsage(1).First().Timestamp;
-                TimeSpan t = DateTime.Now - lastData;
-                if (t.TotalHours >= 2)//가장 최근 data보다 2시간 이상 차이가 나면 data를 insert한다.
-                {
-                    systemUsageDAODay.insertDB(
-                    SystemUsageManager.getCpuUsage(),
-                    (int)SystemUsageManager.getMemUsage(),
-                    (int)SystemUsageManager.getDiskUsage()
-                    );//data insert at DB
-                }
+                return;
             }
 
-            if (checkTimeInterval != 2)
-                return;
-
-            updateWindows(systemUsageDAODay);
+            updateWindows(dao);
         }
 
-        public List<double> dataModulation(List<double> data, List<DateTime> timeList, int count)//data는 가공할 data가 담겨있는 List, timeList는 data의 시간 List, count는 data의 최대 원소 개수
+        /*
+        이 함수의 목적은 db 에서 데이터를 불러왔을 때 timestamp diff 가 ArgusMode 에서 정의된 interval 보다 클 경우 0으로 채우기 위함이다.
+        예를 들어, 현재 ArgusMode 값이 Seconds 일 경우 5초 간격을 갖는것이 일반적인데, 프로그램이 종료, 실행을 하다보면 diff 가 5초 이상인 경우가 있게된다.
+        10초 일 경우에 그 사이에 0인 값이 하나 있어야 자연스러운 그래프가 완성된다.
+        따라서 각 data를 받아 필요한 index 에 0을 삽입하여 적절한 그래프 데이터를 리턴하는 함수이다.
+        */
+        public List<double> dataModulation(List<double> data, List<DateTime> timeList, int count) //data는 가공할 data가 담겨있는 List, timeList는 data의 시간 List, count는 data의 최대 원소 개수
         {
 
-            TimeSpan destanceOfTime = TimeSpan.Zero;
+            TimeSpan distanceOfTime = TimeSpan.Zero;
             int timeSpace = 0;
 
             List<DateTime> time = new List<DateTime>(timeList.Count);
@@ -184,17 +150,17 @@ namespace Argus
             }
             for (int i = 0; i < count - 1; i++)
             {
-                destanceOfTime = time[i] - time[i + 1];
-                switch(checkTimeInterval)
+                distanceOfTime = time[i] - time[i + 1];
+                switch(ArgusMode)
                 {
-                    case 0:
-                        timeSpace = (int)(destanceOfTime.TotalSeconds / 6);
+                    case MODE.SECONDS:
+                        timeSpace = (int)(distanceOfTime.TotalSeconds / 6);
                         break;
-                    case 1:
-                        timeSpace = (int)(destanceOfTime.TotalMinutes / 6);
+                    case MODE.MINUTES:
+                        timeSpace = (int)(distanceOfTime.TotalMinutes / 6);
                         break;
-                    case 2:
-                        timeSpace = (int)(destanceOfTime.TotalHours / 3);
+                    case MODE.HOURS:
+                        timeSpace = (int)(distanceOfTime.TotalHours / 3);
                         break;
                 }
                 if (timeSpace > 0)
@@ -214,6 +180,21 @@ namespace Argus
             }
 
             return data;
+        }
+
+        string getTimerTag(MODE mode)
+        {
+            switch (mode)
+            {
+                case MODE.SECONDS:
+                    return "Sec";
+                case MODE.MINUTES:
+                    return  "Min";
+                case MODE.HOURS:
+                    return "Hour";
+                default:
+                    return "Sec";
+            }
         }
     }
 }
