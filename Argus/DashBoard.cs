@@ -48,14 +48,13 @@ namespace Argus
 
         private void updateChart(IEnumerable<SystemUsageDTO> DTOEnum)
         {
-            List<double> cList = new List<double>();//CPU chart update를 위한 list 이하 동일함
+            List<double> cList = new List<double>();
             List<double> mList = new List<double>();
             List<double> dList = new List<double>();
 
             List<DateTime> timeList = new List<DateTime>();
 
-            //data 가공 시작
-            foreach (var i in DTOEnum)//data에 대한 list item 추가
+            foreach (var i in DTOEnum)
             {
                 cList.Add(i.CPU);
                 mList.Add(i.Memory);
@@ -63,13 +62,17 @@ namespace Argus
                 timeList.Add(i.Timestamp);
             }
 
+            // chart data 가공 시작
             cList = dataModulation(cList, timeList);
             mList = dataModulation(mList, timeList);
             dList = dataModulation(dList, timeList);
 
-            ArgusChart.updateChart(cpuChart, cList);//chart update 이하 동일함
-            ArgusChart.updateChart(memoryChart, mList);
-            ArgusChart.updateChart(diskChart, dList);
+            // MODE 에 맞는 x축 string
+            string title = modeToIngredients[ArgusMode].chartXaxisText;
+
+            ArgusChart.updateChart(cpuChart, cList, title);
+            ArgusChart.updateChart(memoryChart, mList, title);
+            ArgusChart.updateChart(diskChart, dList, title);
         }
 
         // 시간에 따라 주기적으로 호출되는 함수.
