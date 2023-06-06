@@ -14,7 +14,6 @@ namespace Argus
         {
             someChart.AxisX.Add(new Axis
             {
-                Title = "Time (mins ago)",
                 Labels = labels,
                 Separator = new Separator // force the separator step to 1, so it always display all labels
                 {
@@ -35,8 +34,9 @@ namespace Argus
             });
         }
 
-        public static void updateChart(LiveCharts.WinForms.CartesianChart someChart, List<double> values)
+        public static void updateChart(LiveCharts.WinForms.CartesianChart someChart, List<double> values, string title)
         {
+            someChart.AxisX.First().Title = title;
             someChart.Series = new SeriesCollection
             {
                  new LineSeries
