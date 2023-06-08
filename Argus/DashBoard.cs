@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Argus.src;
 using System.Net.Sockets;
 using System.Diagnostics.Eventing.Reader;
+using System.Threading.Tasks;
 
 namespace Argus
 {
