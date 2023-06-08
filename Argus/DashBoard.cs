@@ -193,6 +193,16 @@ namespace Argus
                     return "Sec";
             }
         }
+
+        private void Infobutton_Click(object sender, EventArgs e)
+        {
+            showSystemInfo si = new showSystemInfo();
+            DialogResult dResult = si.ShowDialog();
+            //if (dResult == DialogResult.Cancel)
+            //{
+            //    MessageBox.Show("Cancel");
+            //}
+        }
     }
 }
 

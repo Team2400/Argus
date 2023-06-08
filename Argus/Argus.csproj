@@ -65,6 +65,12 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="showSystemInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="showSystemInfo.Designer.cs">
+      <DependentUpon>showSystemInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\ArgusChart.cs" />
     <Compile Include="DashBoard.cs">
       <SubType>Form</SubType>
@@ -90,6 +96,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="showSystemInfo.resx">
+      <DependentUpon>showSystemInfo.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
