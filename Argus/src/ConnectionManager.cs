@@ -1,5 +1,6 @@
 ﻿using PacketClass;
 using System;
+using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -11,7 +12,6 @@ namespace Argus.src
         TcpListener tcpListener;
         TcpClient tcpClient;
         NetworkStream stream;
-        SystemUsageDTO[] usageArray; //ChildDashboard폼으로 전달될 데이터 변수
 
         public event EventHandler<ConnectionEstablishedEventArgs> ConnectionEstablished;
 
@@ -35,7 +35,7 @@ namespace Argus.src
         {
             TcpClient client = tcpListener.AcceptTcpClient();
 
-            if (client.Connected)
+            if (isConnected)
             {
                 byte[] sendBuffer = new byte[1024 * 4];
                 var stream = client.GetStream();
@@ -62,11 +62,6 @@ namespace Argus.src
 
                 stream.Write(sendBuffer, 0, sendBuffer.Length);
                 stream.Flush();
-
-                //for (int i = 0; i < 1024 * 4; i++)
-                //{
-                //    sendBuffer[i] = 0;
-                //}
             }
         }
 
@@ -93,13 +88,14 @@ namespace Argus.src
             return;
         }
 
-        public SystemUsageDTO[] ReadDataFromStream()
+        public List<SystemUsageDTO> ReadDataFromStream()
         {
             int nRead = 0;
             int n = 0;
             const int dataNum = 1; //전송받는 데이터의 개수
             byte[] readBuffer = new byte[1024 * 4];
             Packet.SystemUsageDTOArray usageFromStream = null;
+            List<SystemUsageDTO> usageList = new List<SystemUsageDTO>();
 
             while (isConnected)
             {
@@ -120,14 +116,16 @@ namespace Argus.src
                     case (int)PacketType.ClassArray:
                         {
                             usageFromStream = (Packet.SystemUsageDTOArray)Packet.Desserialize(readBuffer);
-                            usageArray = new SystemUsageDTO[usageFromStream.arrSize];
-                            for (int i = 0; i < usageArray.Length; i++)
+                            for (int i = 0; i < usageFromStream.arrSize; i++)
                             {
-                                usageArray[i] = new SystemUsageDTO();
-                                usageArray[i].CPU = usageFromStream.Arr[i].CPU;
-                                usageArray[i].Memory = usageFromStream.Arr[i].Memory;
-                                usageArray[i].Disk = usageFromStream.Arr[i].Disk;
-                                usageArray[i].Timestamp = usageFromStream.Arr[i].Timestamp;
+                                var dto = new SystemUsageDTO
+                                {
+                                    CPU = usageFromStream.Arr[i].CPU,
+                                    Memory = usageFromStream.Arr[i].Memory,
+                                    Disk = usageFromStream.Arr[i].Disk,
+                                    Timestamp = usageFromStream.Arr[i].Timestamp,
+                                };
+                                usageList.Add(dto);
                             }
                             break;
                         }
@@ -137,7 +135,7 @@ namespace Argus.src
                     break;
                 }
             }
-            return usageArray;
+            return usageList;
         }
 
         public void CloseConnection() { if (tcpClient != null) tcpClient.Close(); }

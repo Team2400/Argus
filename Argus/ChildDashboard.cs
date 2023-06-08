@@ -28,15 +28,15 @@ namespace Argus
             {
                 connectionManager.TryConnect(ip);
 
-                SystemUsageDTO[] usage = connectionManager.ReadDataFromStream();
+                List<SystemUsageDTO> usage = connectionManager.ReadDataFromStream();
 
                 if (usage != null)
                 {
                     Invoke(new MethodInvoker(delegate ()
                     {
-                        for (int i = 0; i < usage.Length; i++)
+                        foreach (SystemUsageDTO dto in usage)
                         {
-                            textBox1.Text += usage[i].CPU + "/" + usage[i].Memory + "/" + usage[i].Disk + "/" + usage[i].Timestamp + "\r\n";
+                            textBox1.Text += dto.CPU + "/" + dto.Memory + "/" + dto.Disk + "/" + dto.Timestamp + "\r\n";
                         }
                     }));
                 }
