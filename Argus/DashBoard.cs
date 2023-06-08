@@ -119,7 +119,10 @@ namespace Argus
             ); //data insert at DB
 
             // 초단위 timer, 분단위, 시간단위 타이머가 모두 본 eventHandler 를 사용하는데, 모니터에 업데이트 되는 부분은 설정된 mode 에만 동작해야 함
-            if ((string)timerSender.Tag != getTimerTag(ArgusMode))
+            if (
+                (string)timerSender.Tag != getTimerTag(ArgusMode)
+                || (count == 1) // 2023/06/08 프로그램을 처음 킬 때 data 가 1개여서 dataModulation 함수에서 인덱스 바운드 에러 발생. 임시적인 처리.
+            )
             {
                 return;
             }
