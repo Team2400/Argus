@@ -1,4 +1,6 @@
-﻿namespace Argus
+﻿using System.Threading;
+
+namespace Argus
 {
     partial class DashBoard
     {
@@ -28,19 +30,46 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.Infobutton = new System.Windows.Forms.Button();
+            this.connectButton = new System.Windows.Forms.Button();
             this.cpuChart = new LiveCharts.WinForms.CartesianChart();
             this.memoryChart = new LiveCharts.WinForms.CartesianChart();
             this.diskChart = new LiveCharts.WinForms.CartesianChart();
             this.CpuPannel = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.CpuPannel.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // Infobutton
+            // 
+            this.Infobutton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.Infobutton.Font = new System.Drawing.Font("맑은 고딕", 9.75F);
+            this.Infobutton.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.Infobutton.Location = new System.Drawing.Point(215, 21);
+            this.Infobutton.Name = "Infobutton";
+            this.Infobutton.Size = new System.Drawing.Size(134, 41);
+            this.Infobutton.TabIndex = 8;
+            this.Infobutton.Text = "Show System Info";
+            this.Infobutton.UseVisualStyleBackColor = false;
+            this.Infobutton.Click += new System.EventHandler(this.Infobutton_Click);
+            // 
+            // connectButton
+            // 
+            this.connectButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.connectButton.Font = new System.Drawing.Font("맑은 고딕", 9.75F);
+            this.connectButton.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.connectButton.Location = new System.Drawing.Point(25, 21);
+            this.connectButton.Name = "connectButton";
+            this.connectButton.Size = new System.Drawing.Size(163, 41);
+            this.connectButton.TabIndex = 9;
+            this.connectButton.Text = "Connect to Remote PC";
+            this.connectButton.UseVisualStyleBackColor = false;
             // 
             // cpuChart
             // 
@@ -84,30 +113,10 @@
             this.CpuPannel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(22)))), ((int)(((byte)(22)))));
             this.CpuPannel.Controls.Add(this.label1);
             this.CpuPannel.Controls.Add(this.cpuChart);
-            this.CpuPannel.Location = new System.Drawing.Point(26, 28);
+            this.CpuPannel.Location = new System.Drawing.Point(25, 82);
             this.CpuPannel.Name = "CpuPannel";
             this.CpuPannel.Size = new System.Drawing.Size(1392, 240);
             this.CpuPannel.TabIndex = 7;
-            // 
-            // panel2
-            // 
-            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(22)))), ((int)(((byte)(22)))));
-            this.panel2.Controls.Add(this.label2);
-            this.panel2.Controls.Add(this.memoryChart);
-            this.panel2.Location = new System.Drawing.Point(26, 296);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1392, 240);
-            this.panel2.TabIndex = 8;
-            // 
-            // panel3
-            // 
-            this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(22)))), ((int)(((byte)(22)))));
-            this.panel3.Controls.Add(this.label3);
-            this.panel3.Controls.Add(this.diskChart);
-            this.panel3.Location = new System.Drawing.Point(26, 565);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1392, 240);
-            this.panel3.TabIndex = 9;
             // 
             // label1
             // 
@@ -120,6 +129,16 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "CPU";
             // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(22)))), ((int)(((byte)(22)))));
+            this.panel2.Controls.Add(this.label2);
+            this.panel2.Controls.Add(this.memoryChart);
+            this.panel2.Location = new System.Drawing.Point(25, 350);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(1392, 240);
+            this.panel2.TabIndex = 8;
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -130,6 +149,16 @@
             this.label2.Size = new System.Drawing.Size(70, 31);
             this.label2.TabIndex = 3;
             this.label2.Text = "MEM";
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(22)))), ((int)(((byte)(22)))));
+            this.panel3.Controls.Add(this.label3);
+            this.panel3.Controls.Add(this.diskChart);
+            this.panel3.Location = new System.Drawing.Point(25, 619);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(1392, 240);
+            this.panel3.TabIndex = 9;
             // 
             // label3
             // 
@@ -142,40 +171,17 @@
             this.label3.TabIndex = 4;
             this.label3.Text = "DISK";
             // 
-            // Infobutton
-            // 
-            this.Infobutton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.Infobutton.Font = new System.Drawing.Font("맑은 고딕", 9.75F);
-            this.Infobutton.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.Infobutton.Location = new System.Drawing.Point(183, 7);
-            this.Infobutton.Name = "Infobutton";
-            this.Infobutton.Size = new System.Drawing.Size(134, 32);
-            this.Infobutton.TabIndex = 8;
-            this.Infobutton.Text = "Show System Info";
-            this.Infobutton.UseVisualStyleBackColor = false;
-            this.Infobutton.Click += new System.EventHandler(this.Infobutton_Click);
-            // 
-            // connectButton
-            // 
-            this.connectButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.connectButton.Font = new System.Drawing.Font("맑은 고딕", 9.75F);
-            this.connectButton.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.connectButton.Location = new System.Drawing.Point(12, 7);
-            this.connectButton.Name = "connectButton";
-            this.connectButton.Size = new System.Drawing.Size(163, 32);
-            this.connectButton.TabIndex = 9;
-            this.connectButton.Text = "Connect to Remote PC";
-            this.connectButton.UseVisualStyleBackColor = false;
-            // 
             // DashBoard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
-            this.ClientSize = new System.Drawing.Size(1440, 829);
+            this.ClientSize = new System.Drawing.Size(1440, 873);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.CpuPannel);
+            this.Controls.Add(this.Infobutton);
+            this.Controls.Add(this.connectButton);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "DashBoard";
             this.Text = "Argus";
@@ -200,6 +206,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button Infobutton;
+        private System.Windows.Forms.Button connectButton;
     }
 }
 
