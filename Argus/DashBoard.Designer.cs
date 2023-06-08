@@ -70,6 +70,7 @@ namespace Argus
             this.connectButton.TabIndex = 9;
             this.connectButton.Text = "Connect to Remote PC";
             this.connectButton.UseVisualStyleBackColor = false;
+            this.connectButton.Click += new System.EventHandler(this.connectButton_Click);
             // 
             // cpuChart
             // 

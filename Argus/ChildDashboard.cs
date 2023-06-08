@@ -28,7 +28,7 @@ namespace Argus
             {
                 connectionManager.TryConnect(ip);
 
-               SystemUsageDTO[] usage = connectionManager.ReadDataFromStream();
+                SystemUsageDTO[] usage = connectionManager.ReadDataFromStream();
 
                 if (usage != null)
                 {
