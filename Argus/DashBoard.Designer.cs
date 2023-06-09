@@ -41,6 +41,7 @@ namespace Argus
             this.label2 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
+            this.ModeBtn = new System.Windows.Forms.Button();
             this.CpuPannel.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -53,7 +54,7 @@ namespace Argus
             this.Infobutton.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.Infobutton.Location = new System.Drawing.Point(215, 21);
             this.Infobutton.Name = "Infobutton";
-            this.Infobutton.Size = new System.Drawing.Size(134, 41);
+            this.Infobutton.Size = new System.Drawing.Size(229, 41);
             this.Infobutton.TabIndex = 8;
             this.Infobutton.Text = "Show System Info";
             this.Infobutton.UseVisualStyleBackColor = false;
@@ -172,12 +173,26 @@ namespace Argus
             this.label3.TabIndex = 4;
             this.label3.Text = "DISK";
             // 
+            // ModeBtn
+            // 
+            this.ModeBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.ModeBtn.Font = new System.Drawing.Font("맑은 고딕", 9.75F);
+            this.ModeBtn.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.ModeBtn.Location = new System.Drawing.Point(470, 21);
+            this.ModeBtn.Name = "ModeBtn";
+            this.ModeBtn.Size = new System.Drawing.Size(134, 41);
+            this.ModeBtn.TabIndex = 10;
+            this.ModeBtn.Text = "Mode";
+            this.ModeBtn.UseVisualStyleBackColor = false;
+            this.ModeBtn.Click += new System.EventHandler(this.ModeBtn_Click);
+            // 
             // DashBoard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
             this.ClientSize = new System.Drawing.Size(1440, 873);
+            this.Controls.Add(this.ModeBtn);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.CpuPannel);
@@ -210,6 +225,7 @@ namespace Argus
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button Infobutton;
         private System.Windows.Forms.Button connectButton;
+        private System.Windows.Forms.Button ModeBtn;
     }
 }
 

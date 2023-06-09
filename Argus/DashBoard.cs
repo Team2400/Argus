@@ -19,7 +19,7 @@ namespace Argus
         Thread RegularSenderThread;
         ConnectionManager connectionManager;
 
-        MODE ArgusMode = MODE.SECONDS;
+        MODE ArgusMode = MODE.MINUTES;
 
         ChildDashboard childDashboard;
 
@@ -39,10 +39,8 @@ namespace Argus
 
         private void Connection_Established(object sender, ConnectionEstablishedEventArgs e)
         {
-            var message = "실패";
             if (e.IsConnected)
             {
-                message = "성공";
                 // 연결된 클라이언트에 주기적으로 데이터를 보내는 thread 이다.
                 // 클라이언트로 송신해 주는것은 별도의 흐름에서 동작해야한다.
                 RegularSenderThread = new Thread(delegate () {
@@ -56,8 +54,10 @@ namespace Argus
                     }
                 });
                 RegularSenderThread.Start();
+            } else
+            {
+                MessageBox.Show("연결 실패");
             }
-            MessageBox.Show(message);
         }
 
         private void DashBoard_Load(object sender, EventArgs e)
@@ -130,7 +130,7 @@ namespace Argus
                         //shouldUpdateOrNot =  t.TotalSeconds < 5; // 5초
                         break;
                     case MODE.MINUTES:
-                        shouldUpdateOrNot = t.TotalMinutes < 5; // 5분
+                        //shouldUpdateOrNot = t.TotalMinutes < 5; // 5분
                         break;
                     case MODE.HOURS:
                         shouldUpdateOrNot = t.TotalHours < 1; // 1시간
@@ -150,10 +150,7 @@ namespace Argus
             ); //data insert at DB
 
             // 초단위 timer, 분단위, 시간단위 타이머가 모두 본 eventHandler 를 사용하는데, 모니터에 업데이트 되는 부분은 설정된 mode 에만 동작해야 함
-            if (
-                (string)timerSender.Tag != getTimerTag(ArgusMode)
-                || (count == 1) // 2023/06/08 프로그램을 처음 킬 때 data 가 1개여서 dataModulation 함수에서 인덱스 바운드 에러 발생. 임시적인 처리.
-            )
+            if ((string)timerSender.Tag != getTimerTag(ArgusMode))
             {
                 return;
             }
@@ -176,7 +173,7 @@ namespace Argus
         */
         public List<double> dataModulation(List<double> data, List<DateTime> timeList) //data는 가공할 data가 담겨있는 List, timeList는 data의 시간 List, count는 data의 최대 원소 개수
         {
-            int OriginalCount = 13;
+            int OriginalCount = data.Count;
             TimeSpan distanceOfTime = TimeSpan.Zero;
             int timeSpace = 0;
 
@@ -186,7 +183,7 @@ namespace Argus
             {
                 time.Add(timeList[i]);
             }
-            for (int i = 0; i < OriginalCount -1; i++)
+            for (int i = 0; i < OriginalCount - 1; i++)
             {
                 distanceOfTime = time[i] - time[i + 1];
                 switch(ArgusMode)
@@ -270,6 +267,17 @@ namespace Argus
             connectionManager.StopListener();
             connectionManager.CloseServerAcceptedConnection();
             connectionManager.CloseConnection();
+        }
+
+        private void ModeBtn_Click(object sender, EventArgs e)
+        {
+            ModeSelect modeDialog = new ModeSelect(ArgusMode);
+            DialogResult result = modeDialog.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                ArgusMode = modeDialog.mode;
+            }
         }
     }
 }
