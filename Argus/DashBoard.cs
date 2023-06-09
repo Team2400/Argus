@@ -19,7 +19,7 @@ namespace Argus
         Thread RegularSenderThread;
         ConnectionManager connectionManager;
 
-        MODE ArgusMode = MODE.MINUTES;
+        MODE ArgusMode = MODE.SECONDS;
 
         ChildDashboard childDashboard;
 
