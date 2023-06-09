@@ -7,6 +7,7 @@ using Argus.src;
 using System.Net.Sockets;
 using System.Diagnostics.Eventing.Reader;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Argus
 {
@@ -15,9 +16,12 @@ namespace Argus
         Dictionary<MODE, System.Windows.Forms.Timer> timerDictionary;
         Dictionary<MODE, ArgusIngredient> modeToIngredients;
 
+        Thread RegularSenderThread;
         ConnectionManager connectionManager;
 
         MODE ArgusMode = MODE.SECONDS;
+
+        ChildDashboard childDashboard;
 
         public DashBoard()
         {
@@ -36,13 +40,22 @@ namespace Argus
         private void Connection_Established(object sender, ConnectionEstablishedEventArgs e)
         {
             var message = "실패";
-            if (e.isConnected)
+            if (e.IsConnected)
             {
                 message = "성공";
-                Task.Run(() =>
-                {
-                    connectionManager.AcceptConnectionAndStartSendData();
+                // 연결된 클라이언트에 주기적으로 데이터를 보내는 thread 이다.
+                // 클라이언트로 송신해 주는것은 별도의 흐름에서 동작해야한다.
+                RegularSenderThread = new Thread(delegate () {
+                    while (true)
+                    {
+                        int LIMIT = 13;
+                        var dtoList = modeToIngredients[MODE.SECONDS].usageDAO.selectSysUsage(LIMIT).ToArray();
+                        Task.Run(() => { connectionManager.TrySendData(dtoList); });
+
+                        Thread.Sleep(5000);
+                    }
                 });
+                RegularSenderThread.Start();
             }
             MessageBox.Show(message);
         }
@@ -68,7 +81,7 @@ namespace Argus
             }
         }
 
-        private void updateChart(IEnumerable<SystemUsageDTO> DTOEnum)
+        private ChartDTO getChartDTO(IEnumerable<SystemUsageDTO> DTOEnum)
         {
             List<double> cList = new List<double>();
             List<double> mList = new List<double>();
@@ -84,17 +97,13 @@ namespace Argus
                 timeList.Add(i.Timestamp);
             }
 
-            // chart data 가공 시작
-            cList = dataModulation(cList, timeList);
-            mList = dataModulation(mList, timeList);
-            dList = dataModulation(dList, timeList);
-
-            // MODE 에 맞는 x축 string
-            string title = modeToIngredients[ArgusMode].chartXaxisText;
-
-            ArgusChart.updateChart(cpuChart, cList, title);
-            ArgusChart.updateChart(memoryChart, mList, title);
-            ArgusChart.updateChart(diskChart, dList, title);
+            return new ChartDTO
+            {
+                // chart data 가공 시작
+                cList = dataModulation(cList, timeList),
+                mList = dataModulation(mList, timeList),
+                dList = dataModulation(dList, timeList),
+            };
         }
 
         // 시간에 따라 주기적으로 호출되는 함수.
@@ -146,7 +155,14 @@ namespace Argus
                 return;
             }
 
-            updateChart(DAO.selectSysUsage(count)); // count 만큼 불러와서 chart 에 업데이트한다.
+            ChartDTO chartDTO = getChartDTO(DAO.selectSysUsage(count)); // count 만큼 불러와서 chart 에 업데이트한다.
+
+            // MODE 에 맞는 x축 string
+            string title = modeToIngredients[ArgusMode].chartXaxisText;
+
+            ArgusChart.updateChart(cpuChart, chartDTO.cList, title);
+            ArgusChart.updateChart(memoryChart, chartDTO.mList, title);
+            ArgusChart.updateChart(diskChart, chartDTO.dList, title);
         }
 
         /*
@@ -234,14 +250,23 @@ namespace Argus
 
             if (dResult == DialogResult.OK)
             {
-                ChildDashboard childDashboard = new ChildDashboard(connectionManager, ip);
-                childDashboard.ShowDialog();
+                if (childDashboard == null)
+                {
+                    childDashboard = new ChildDashboard(connectionManager, ip);
+                    childDashboard.Show();
+                } else
+                {
+                    childDashboard.Show();
+                    childDashboard.ResumeDashboard(ip);
+                }
             }
         }
 
         private void DashBoard_FormClosed(object sender, FormClosedEventArgs e)
         {
             connectionManager.StopListener();
+            connectionManager.CloseServerAcceptedConnection();
+            connectionManager.CloseConnection();
         }
     }
 }

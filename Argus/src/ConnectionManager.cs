@@ -1,6 +1,7 @@
 ﻿using PacketClass;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -10,17 +11,18 @@ namespace Argus.src
     public class ConnectionManager
     {
         TcpListener tcpListener;
-        TcpClient tcpClient;
-        NetworkStream stream;
 
+        public TcpClient ClientConnection;
+        public TcpClient ServerConnection;
         public event EventHandler<ConnectionEstablishedEventArgs> ConnectionEstablished;
-
-        public bool isConnected { get; set; } = false;
+        public bool IsConnected { get; set; } = false;
         const int PORT = 7777;
+
+        Stream stream;
 
         public ConnectionManager()
         {
-            tcpClient = new TcpClient();
+            ClientConnection = new TcpClient();
             tcpListener = new TcpListener(PORT);
         }
 
@@ -28,40 +30,46 @@ namespace Argus.src
 
         public void StopListener() 
         {
-            if (tcpListener != null) tcpListener.Stop(); 
+            if (tcpListener != null) tcpListener.Stop();
         }
 
-        public void AcceptConnectionAndStartSendData()
+        public void TrySendData(SystemUsageDTO[] dtoArray)
         {
-            TcpClient client = tcpListener.AcceptTcpClient();
-
-            if (isConnected)
+            if (ServerConnection == null)
             {
-                byte[] sendBuffer = new byte[1024 * 4];
-                var stream = client.GetStream();
+                ServerConnection = tcpListener.AcceptTcpClient();
+            }
 
-                //SystemUsage클래스 배열 데이터 전송
-                Packet.SystemUsageDTOArray a = new Packet.SystemUsageDTOArray();
-                a.Type = (int)PacketType.ClassArray;
-                a.arrSize = 12;
-                a.Arr = new Packet.SystemUsageDTO[a.arrSize];
-                double b = 1.1;
-                double c = 1.2;
-                double d = 1.3;
-                for (int i = 0; i < a.Arr.Length; i++)
+            if (ServerConnection.Connected)
+            {
+                try
                 {
-                    a.Arr[i] = new Packet.SystemUsageDTO();
-                    a.Arr[i].CPU = b;
-                    a.Arr[i].Memory = c;
-                    a.Arr[i].Disk = d;
-                    a.Arr[i].Timestamp = DateTime.Now;
-                    b += 1; c += 1; d += 1;
+                    byte[] sendBuffer = new byte[1024 * 4];
+                    var stream = ServerConnection.GetStream();
+
+                    //SystemUsage클래스 배열 데이터 전송
+                    Packet.SystemUsageDTOArray packetDTO = new Packet.SystemUsageDTOArray();
+                    packetDTO.Type = (int)PacketType.ClassArray;
+                    packetDTO.arrSize = dtoArray.Length;
+                    packetDTO.Arr = new Packet.SystemUsageDTO[dtoArray.Length];
+
+                    for (int i = 0; i < dtoArray.Length; i++)
+                    {
+                        packetDTO.Arr[i] = new Packet.SystemUsageDTO();
+                        packetDTO.Arr[i].CPU = dtoArray[i].CPU;
+                        packetDTO.Arr[i].Memory = dtoArray[i].Memory;
+                        packetDTO.Arr[i].Disk = dtoArray[i].Disk;
+                        packetDTO.Arr[i].Timestamp = dtoArray[i].Timestamp;
+                    }
+
+                    Packet.Serialize(packetDTO).CopyTo(sendBuffer, 0);
+
+                    stream.Write(sendBuffer, 0, sendBuffer.Length);
+                    stream.Flush();
+                } catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
                 }
-
-                Packet.Serialize(a).CopyTo(sendBuffer, 0);
-
-                stream.Write(sendBuffer, 0, sendBuffer.Length);
-                stream.Flush();
             }
         }
 
@@ -70,19 +78,21 @@ namespace Argus.src
             ConnectionEstablishedEventArgs args = new ConnectionEstablishedEventArgs();
             try
             {
-                tcpClient.Connect(ip, PORT);
+                ClientConnection = new TcpClient();
+                ClientConnection.Connect(ip, PORT);
             }
-            catch
+            catch (Exception e)
             {
-                isConnected = false;
-                args.isConnected = isConnected;
+                MessageBox.Show(e.Message);
+                IsConnected = false;
+                args.IsConnected = IsConnected;
 
                 OnConnectionEstablished(args);
                 return;
             }
-            isConnected = true;
-            stream = tcpClient.GetStream();
-            args.isConnected = isConnected;
+            IsConnected = true;
+            args.IsConnected = IsConnected;
+            stream = ClientConnection.GetStream();
 
             OnConnectionEstablished(args);
             return;
@@ -97,17 +107,19 @@ namespace Argus.src
             Packet.SystemUsageDTOArray usageFromStream = null;
             List<SystemUsageDTO> usageList = new List<SystemUsageDTO>();
 
-            while (isConnected)
+            while (IsConnected)
             {
                 try
                 {
+                    //var stream = ClientConnection.GetStream();
                     nRead = 0;
                     nRead = stream.Read(readBuffer, 0, 1024 * 4);
                 }
                 catch (Exception e)
                 {
-                    isConnected = false;
-                    stream = null;
+                    MessageBox.Show("faild to read from stream\n " + e.Message + e.StackTrace);
+                    IsConnected = false;
+                    return usageList;
                 }
                 Packet packet = (Packet)Packet.Desserialize(readBuffer);
 
@@ -137,9 +149,16 @@ namespace Argus.src
             }
             return usageList;
         }
+        public void CloseServerAcceptedConnection()
+        {
+            if (ServerConnection != null) ServerConnection.Close();
+        }
 
-        public void CloseConnection() { if (tcpClient != null) tcpClient.Close(); }
-        public void CloseStream() { if (stream != null) stream.Close(); }
+        public void CloseConnection() 
+        { 
+            if (ClientConnection != null) ClientConnection.Close();
+            IsConnected = false;
+        }
 
         public void OnConnectionEstablished(ConnectionEstablishedEventArgs e)
         {
@@ -153,6 +172,6 @@ namespace Argus.src
 
     public class ConnectionEstablishedEventArgs : EventArgs
     {
-        public bool isConnected { get; set; }
+        public bool IsConnected { get; set; }
     }
 }
