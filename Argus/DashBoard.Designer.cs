@@ -70,6 +70,7 @@ namespace Argus
             this.connectButton.TabIndex = 9;
             this.connectButton.Text = "Connect to Remote PC";
             this.connectButton.UseVisualStyleBackColor = false;
+            this.connectButton.Click += new System.EventHandler(this.connectButton_Click);
             // 
             // cpuChart
             // 
@@ -185,6 +186,7 @@ namespace Argus
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "DashBoard";
             this.Text = "Argus";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.DashBoard_FormClosed);
             this.Load += new System.EventHandler(this.DashBoard_Load);
             this.CpuPannel.ResumeLayout(false);
             this.CpuPannel.PerformLayout();
