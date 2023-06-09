@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Argus.src;
 using System.Security.RightsManagement;
+using System.Threading.Tasks;
 
 namespace Argus
 {
@@ -12,6 +13,7 @@ namespace Argus
     {
         Dictionary<MODE, System.Windows.Forms.Timer> timerDictionary;
         Dictionary<MODE, ArgusIngredient> modeToIngredients;
+        Dictionary<string, Alert> alertsDictionary;
 
         MODE ArgusMode = MODE.SECONDS;
 
@@ -24,6 +26,13 @@ namespace Argus
             List<LiveCharts.WinForms.CartesianChart> chartList = new List<LiveCharts.WinForms.CartesianChart> { cpuChart, memoryChart, diskChart };
 
             chartList.ForEach(chart => ArgusChart.makeChart(chart, labels));
+
+            // alert init
+            alertsDictionary = new Dictionary<string, Alert>();
+
+            alertsDictionary.Add("CPU", new Alert { type = "CPU" });
+            alertsDictionary.Add("MEM", new Alert { type = "MEM" });
+            alertsDictionary.Add("DISK", new Alert { type = "DISK" });
         }
 
         private void DashBoard_Load(object sender, EventArgs e)
@@ -113,11 +122,31 @@ namespace Argus
                 }
             }
 
-            DAO.insertDB(
-                SystemUsageManager.getCpuUsage(),
-                (int)SystemUsageManager.getMemUsage(),
-                (int)SystemUsageManager.getDiskUsage()
-            ); //data insert at DB
+            Dictionary<string, int> usageDict = new Dictionary<string, int>();
+            usageDict.Add("CPU", SystemUsageManager.getCpuUsage());
+            usageDict.Add("MEM", (int)SystemUsageManager.getMemUsage());
+            usageDict.Add("DISK", (int)SystemUsageManager.getDiskUsage());
+
+            Task.Run(() =>
+            {
+                // 알람체크
+                foreach (KeyValuePair<string, Alert> kvp in alertsDictionary)
+                {
+                    var key = kvp.Key;
+                    var value = kvp.Value;
+
+                    if (value.initialized == false || value.triggered) { continue; }
+
+                    if (usageDict[key] > value.threshold) 
+                    {
+                        value.triggered = true;
+                        MessageBox.Show(value.message, "warning", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        value.triggered = false;
+                    }
+                }
+            });
+
+            DAO.insertDB(usageDict["CPU"], usageDict["MEM"], usageDict["DISK"]); //data insert at DB
 
             // 초단위 timer, 분단위, 시간단위 타이머가 모두 본 eventHandler 를 사용하는데, 모니터에 업데이트 되는 부분은 설정된 mode 에만 동작해야 함
             if ((string)timerSender.Tag != getTimerTag(ArgusMode))
@@ -195,43 +224,32 @@ namespace Argus
             }
         }
 
-        /// ///////////////////////////////////////////////////////////////////////////
-
-        public string message;//messagebox로 표시할 message.
-                              //alert에서 참조할 수 있게 전역변수로
-        public int thres=0;
-        string alertCPU,alertMemory,alertDisk;
-        int thresholdCpu, thresholdDisk, thresholdMemory;
-
         public void Button_Click(object sender, EventArgs e)
         {
-            Alert al = new Alert();
-            al.Owner = this;//자식 폼의 owner를 이 폼으로.
-            al.Show();
-
             Button clickedButton = sender as Button; // sender를 Button 타입으로 형변환
+            string key = "CPU";
 
-            if (clickedButton != null)
+            if (clickedButton == AlertMem)
             {
-                if (clickedButton == buttonCPU)
+                key = "MEM";
+            }
+            else if (clickedButton == AlertDisk)
+            {
+                key = "DISK";
+            }
+
+            AlertDialog al = new AlertDialog(alertsDictionary[key]);
+            DialogResult result = al.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                if (al.alert.initialized == false)
                 {
-                    alertCPU = message;
-                    thresholdCpu = thres;
+                    al.alert.initialized = true;
                 }
-                else if (clickedButton == buttonDISK)
-                {
-                    alertDisk = message;
-                    thresholdDisk = thres;
-                }
-                else if (clickedButton == buttonMEM)
-                {
-                   alertMemory= message;
-                    thresholdMemory = thres;
-                }
+                alertsDictionary[key] = al.alert;
             }
         }
-
-        
     }
 }
 

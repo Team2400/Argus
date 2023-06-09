@@ -34,13 +34,13 @@
             this.diskChart = new LiveCharts.WinForms.CartesianChart();
             this.CpuPannel = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.buttonCPU = new System.Windows.Forms.Button();
+            this.AlertCpu = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
-            this.buttonMEM = new System.Windows.Forms.Button();
+            this.AlertMem = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
-            this.buttonDISK = new System.Windows.Forms.Button();
+            this.AlertDisk = new System.Windows.Forms.Button();
             this.CpuPannel.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -88,7 +88,7 @@
             this.CpuPannel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(22)))), ((int)(((byte)(22)))));
             this.CpuPannel.Controls.Add(this.label1);
             this.CpuPannel.Controls.Add(this.cpuChart);
-            this.CpuPannel.Controls.Add(this.buttonCPU);
+            this.CpuPannel.Controls.Add(this.AlertCpu);
             this.CpuPannel.Location = new System.Drawing.Point(26, 31);
             this.CpuPannel.Name = "CpuPannel";
             this.CpuPannel.Size = new System.Drawing.Size(1392, 240);
@@ -105,23 +105,23 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "CPU";
             // 
-            // buttonCPU
+            // AlertCpu
             // 
-            this.buttonCPU.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonCPU.BackgroundImage")));
-            this.buttonCPU.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.buttonCPU.Location = new System.Drawing.Point(1352, 0);
-            this.buttonCPU.Name = "buttonCPU";
-            this.buttonCPU.Size = new System.Drawing.Size(40, 40);
-            this.buttonCPU.TabIndex = 7;
-            this.buttonCPU.UseVisualStyleBackColor = true;
-            this.buttonCPU.Click += new System.EventHandler(this.Button_Click);
+            this.AlertCpu.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("AlertCpu.BackgroundImage")));
+            this.AlertCpu.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.AlertCpu.Location = new System.Drawing.Point(1352, 0);
+            this.AlertCpu.Name = "AlertCpu";
+            this.AlertCpu.Size = new System.Drawing.Size(40, 40);
+            this.AlertCpu.TabIndex = 7;
+            this.AlertCpu.UseVisualStyleBackColor = true;
+            this.AlertCpu.Click += new System.EventHandler(this.Button_Click);
             // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(22)))), ((int)(((byte)(22)))));
             this.panel2.Controls.Add(this.label2);
             this.panel2.Controls.Add(this.memoryChart);
-            this.panel2.Controls.Add(this.buttonMEM);
+            this.panel2.Controls.Add(this.AlertMem);
             this.panel2.Location = new System.Drawing.Point(26, 296);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(1392, 240);
@@ -138,23 +138,23 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "MEM";
             // 
-            // buttonMEM
+            // AlertMem
             // 
-            this.buttonMEM.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonMEM.BackgroundImage")));
-            this.buttonMEM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.buttonMEM.Location = new System.Drawing.Point(1352, 0);
-            this.buttonMEM.Name = "buttonMEM";
-            this.buttonMEM.Size = new System.Drawing.Size(40, 40);
-            this.buttonMEM.TabIndex = 8;
-            this.buttonMEM.UseVisualStyleBackColor = true;
-            this.buttonMEM.Click += new System.EventHandler(this.Button_Click);
+            this.AlertMem.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("AlertMem.BackgroundImage")));
+            this.AlertMem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.AlertMem.Location = new System.Drawing.Point(1352, 0);
+            this.AlertMem.Name = "AlertMem";
+            this.AlertMem.Size = new System.Drawing.Size(40, 40);
+            this.AlertMem.TabIndex = 8;
+            this.AlertMem.UseVisualStyleBackColor = true;
+            this.AlertMem.Click += new System.EventHandler(this.Button_Click);
             // 
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(22)))), ((int)(((byte)(22)))));
             this.panel3.Controls.Add(this.label3);
             this.panel3.Controls.Add(this.diskChart);
-            this.panel3.Controls.Add(this.buttonDISK);
+            this.panel3.Controls.Add(this.AlertDisk);
             this.panel3.Location = new System.Drawing.Point(26, 565);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(1392, 240);
@@ -171,23 +171,23 @@
             this.label3.TabIndex = 4;
             this.label3.Text = "DISK";
             // 
-            // buttonDISK
+            // AlertDisk
             // 
-            this.buttonDISK.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonDISK.BackgroundImage")));
-            this.buttonDISK.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.buttonDISK.Location = new System.Drawing.Point(1352, 0);
-            this.buttonDISK.Name = "buttonDISK";
-            this.buttonDISK.Size = new System.Drawing.Size(40, 40);
-            this.buttonDISK.TabIndex = 9;
-            this.buttonDISK.UseVisualStyleBackColor = true;
-            this.buttonDISK.Click += new System.EventHandler(this.Button_Click);
+            this.AlertDisk.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("AlertDisk.BackgroundImage")));
+            this.AlertDisk.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.AlertDisk.Location = new System.Drawing.Point(1352, 0);
+            this.AlertDisk.Name = "AlertDisk";
+            this.AlertDisk.Size = new System.Drawing.Size(40, 40);
+            this.AlertDisk.TabIndex = 9;
+            this.AlertDisk.UseVisualStyleBackColor = true;
+            this.AlertDisk.Click += new System.EventHandler(this.Button_Click);
             // 
             // DashBoard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
-            this.ClientSize = new System.Drawing.Size(1440, 829);
+            this.ClientSize = new System.Drawing.Size(1440, 823);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.CpuPannel);
@@ -215,9 +215,9 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button buttonCPU;
-        private System.Windows.Forms.Button buttonMEM;
-        private System.Windows.Forms.Button buttonDISK;
+        private System.Windows.Forms.Button AlertCpu;
+        private System.Windows.Forms.Button AlertMem;
+        private System.Windows.Forms.Button AlertDisk;
     }
 }
 
