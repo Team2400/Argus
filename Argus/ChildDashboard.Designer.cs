@@ -153,7 +153,7 @@
             this.Controls.Add(this.CpuPannel);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "ChildDashboard";
-            this.Text = "Form1";
+            this.Text = "Connected Dashboard";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ChildDashboard_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ChildDashboard_FormClosed);
             this.panel3.ResumeLayout(false);
