@@ -30,18 +30,24 @@ namespace Argus
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DashBoard));
             this.Infobutton = new System.Windows.Forms.Button();
             this.connectButton = new System.Windows.Forms.Button();
+       
             this.cpuChart = new LiveCharts.WinForms.CartesianChart();
             this.memoryChart = new LiveCharts.WinForms.CartesianChart();
             this.diskChart = new LiveCharts.WinForms.CartesianChart();
             this.CpuPannel = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.panel2 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
-            this.panel3 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
+
             this.ModeBtn = new System.Windows.Forms.Button();
+            this.AlertCpu = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.AlertMem = new System.Windows.Forms.Button();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.AlertDisk = new System.Windows.Forms.Button();
             this.CpuPannel.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -116,6 +122,7 @@ namespace Argus
             this.CpuPannel.Controls.Add(this.label1);
             this.CpuPannel.Controls.Add(this.cpuChart);
             this.CpuPannel.Location = new System.Drawing.Point(25, 82);
+            this.CpuPannel.Controls.Add(this.AlertCpu);
             this.CpuPannel.Name = "CpuPannel";
             this.CpuPannel.Size = new System.Drawing.Size(1392, 240);
             this.CpuPannel.TabIndex = 7;
@@ -131,12 +138,24 @@ namespace Argus
             this.label1.TabIndex = 2;
             this.label1.Text = "CPU";
             // 
+            // AlertCpu
+            // 
+            this.AlertCpu.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("AlertCpu.BackgroundImage")));
+            this.AlertCpu.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.AlertCpu.Location = new System.Drawing.Point(1352, 0);
+            this.AlertCpu.Name = "AlertCpu";
+            this.AlertCpu.Size = new System.Drawing.Size(40, 40);
+            this.AlertCpu.TabIndex = 7;
+            this.AlertCpu.UseVisualStyleBackColor = true;
+            this.AlertCpu.Click += new System.EventHandler(this.Button_Click);
+            // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(22)))), ((int)(((byte)(22)))));
             this.panel2.Controls.Add(this.label2);
             this.panel2.Controls.Add(this.memoryChart);
             this.panel2.Location = new System.Drawing.Point(25, 350);
+            this.panel2.Controls.Add(this.AlertMem);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(1392, 240);
             this.panel2.TabIndex = 8;
@@ -152,12 +171,24 @@ namespace Argus
             this.label2.TabIndex = 3;
             this.label2.Text = "MEM";
             // 
+            // AlertMem
+            // 
+            this.AlertMem.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("AlertMem.BackgroundImage")));
+            this.AlertMem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.AlertMem.Location = new System.Drawing.Point(1352, 0);
+            this.AlertMem.Name = "AlertMem";
+            this.AlertMem.Size = new System.Drawing.Size(40, 40);
+            this.AlertMem.TabIndex = 8;
+            this.AlertMem.UseVisualStyleBackColor = true;
+            this.AlertMem.Click += new System.EventHandler(this.Button_Click);
+            // 
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(22)))), ((int)(((byte)(22)))));
             this.panel3.Controls.Add(this.label3);
             this.panel3.Controls.Add(this.diskChart);
             this.panel3.Location = new System.Drawing.Point(25, 619);
+            this.panel3.Controls.Add(this.AlertDisk);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(1392, 240);
             this.panel3.TabIndex = 9;
@@ -185,6 +216,17 @@ namespace Argus
             this.ModeBtn.Text = "Mode";
             this.ModeBtn.UseVisualStyleBackColor = false;
             this.ModeBtn.Click += new System.EventHandler(this.ModeBtn_Click);
+            //
+            // AlertDisk
+            // 
+            this.AlertDisk.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("AlertDisk.BackgroundImage")));
+            this.AlertDisk.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.AlertDisk.Location = new System.Drawing.Point(1352, 0);
+            this.AlertDisk.Name = "AlertDisk";
+            this.AlertDisk.Size = new System.Drawing.Size(40, 40);
+            this.AlertDisk.TabIndex = 9;
+            this.AlertDisk.UseVisualStyleBackColor = true;
+            this.AlertDisk.Click += new System.EventHandler(this.Button_Click);
             // 
             // DashBoard
             // 
@@ -210,7 +252,6 @@ namespace Argus
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.ResumeLayout(false);
-
         }
 
         #endregion
@@ -226,6 +267,9 @@ namespace Argus
         private System.Windows.Forms.Button Infobutton;
         private System.Windows.Forms.Button connectButton;
         private System.Windows.Forms.Button ModeBtn;
+        private System.Windows.Forms.Button AlertCpu;
+        private System.Windows.Forms.Button AlertMem;
+        private System.Windows.Forms.Button AlertDisk;
     }
 }
 

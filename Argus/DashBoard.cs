@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Argus.src;
-using System.Net.Sockets;
-using System.Diagnostics.Eventing.Reader;
 using System.Threading.Tasks;
 using System.Threading;
 
@@ -22,12 +20,16 @@ namespace Argus
         MODE ArgusMode = MODE.SECONDS;
 
         ChildDashboard childDashboard;
+        Dictionary<string, Alert> alertsDictionary;
+
+        bool ForceUpdateChart = false;
 
         public DashBoard()
         {
             InitializeComponent();
 
             List<string> labels = new List<string> { "0", "5", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55", "60" };
+
             List<LiveCharts.WinForms.CartesianChart> chartList = new List<LiveCharts.WinForms.CartesianChart> { cpuChart, memoryChart, diskChart };
 
             chartList.ForEach(chart => ArgusChart.makeChart(chart, labels));
@@ -35,6 +37,12 @@ namespace Argus
             connectionManager = new ConnectionManager();
             connectionManager.ConnectionEstablished += Connection_Established;
             connectionManager.StartListener();
+
+            alertsDictionary = new Dictionary<string, Alert>();
+
+            alertsDictionary.Add("CPU", new Alert { type = "CPU" });
+            alertsDictionary.Add("MEM", new Alert { type = "MEM" });
+            alertsDictionary.Add("DISK", new Alert { type = "DISK" });
         }
 
         private void Connection_Established(object sender, ConnectionEstablishedEventArgs e)
@@ -117,7 +125,7 @@ namespace Argus
 
             // data 가 하나라도 없는 경우에는 if 문을 스킵하여 data 를 넣고 updateChart 하도록 한다.
             // 하나라도 있는 경우에는 마지막 아이템으로 부터 시간차이를 구해서 만일 값을 넣을 때가 아니라면 insert 하는 과정을 넘기도록 한다.
-            if (count > 0)
+            if (count > 0 && ForceUpdateChart == false)
             {
                 DateTime lastData = DAO.selectSysUsage(1).First().Timestamp;
                 TimeSpan t = DateTime.Now - lastData;
@@ -130,7 +138,7 @@ namespace Argus
                         //shouldUpdateOrNot =  t.TotalSeconds < 5; // 5초
                         break;
                     case MODE.MINUTES:
-                        //shouldUpdateOrNot = t.TotalMinutes < 5; // 5분
+                        shouldUpdateOrNot = t.TotalMinutes < 5; // 5분
                         break;
                     case MODE.HOURS:
                         shouldUpdateOrNot = t.TotalHours < 1; // 1시간
@@ -143,17 +151,35 @@ namespace Argus
                 }
             }
 
-            DAO.insertDB(
-                SystemUsageManager.getCpuUsage(),
-                (int)SystemUsageManager.getMemUsage(),
-                (int)SystemUsageManager.getDiskUsage()
-            ); //data insert at DB
+
+            Dictionary<string, int> usageDict = new Dictionary<string, int>();
+            usageDict.Add("CPU", SystemUsageManager.getCpuUsage());
+            usageDict.Add("MEM", (int)SystemUsageManager.getMemUsage());
+            usageDict.Add("DISK", (int)SystemUsageManager.getDiskUsage());
+
+            Task.Run(() =>
+            {
+                // 알람체크
+                foreach (KeyValuePair<string, Alert> kvp in alertsDictionary)
+                {
+                    var key = kvp.Key;
+                    var value = kvp.Value;
+
+                    if (value.initialized == false || value.triggered) { continue; }
+
+                    if (usageDict[key] > value.threshold) 
+                    {
+                        value.triggered = true;
+                        MessageBox.Show(value.message, "warning", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        value.triggered = false;
+                    }
+                }
+            });
+
+            DAO.insertDB(usageDict["CPU"], usageDict["MEM"], usageDict["DISK"]); //data insert at DB
 
             // 초단위 timer, 분단위, 시간단위 타이머가 모두 본 eventHandler 를 사용하는데, 모니터에 업데이트 되는 부분은 설정된 mode 에만 동작해야 함
-            if ((string)timerSender.Tag != getTimerTag(ArgusMode))
-            {
-                return;
-            }
+            if ((string)timerSender.Tag != getTimerTag(ArgusMode) && ForceUpdateChart == false) return; 
 
             ChartDTO chartDTO = getChartDTO(DAO.selectSysUsage(count)); // count 만큼 불러와서 chart 에 업데이트한다.
 
@@ -163,6 +189,8 @@ namespace Argus
             ArgusChart.updateChart(cpuChart, chartDTO.cList, title);
             ArgusChart.updateChart(memoryChart, chartDTO.mList, title);
             ArgusChart.updateChart(diskChart, chartDTO.dList, title);
+
+            if (ForceUpdateChart == true) ForceUpdateChart = false;
         }
 
         /*
@@ -277,6 +305,35 @@ namespace Argus
             if (result == DialogResult.OK)
             {
                 ArgusMode = modeDialog.mode;
+                // 변경된 모드 반영을 위해 Seconds 가 아니면 한 번 실행시킴.
+                ForceUpdateChart = true;
+                Timer_Work(timerDictionary[ArgusMode], e);
+            }
+        }
+        public void Button_Click(object sender, EventArgs e)
+        {
+            Button clickedButton = sender as Button; // sender를 Button 타입으로 형변환
+            string key = "CPU";
+
+            if (clickedButton == AlertMem)
+            {
+                key = "MEM";
+            }
+            else if (clickedButton == AlertDisk)
+            {
+                key = "DISK";
+            }
+
+            AlertDialog al = new AlertDialog(alertsDictionary[key]);
+            DialogResult result = al.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                if (al.alert.initialized == false)
+                {
+                    al.alert.initialized = true;
+                }
+                alertsDictionary[key] = al.alert;
             }
         }
     }

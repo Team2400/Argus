@@ -80,6 +80,13 @@
     <Compile Include="showSystemInfo.Designer.cs">
       <DependentUpon>showSystemInfo.cs</DependentUpon>
     </Compile>
+    <Compile Include="AlertDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AlertDialog.Designer.cs">
+      <DependentUpon>AlertDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\Alert.cs" />
     <Compile Include="src\ArgusChart.cs" />
     <Compile Include="DashBoard.cs">
       <SubType>Form</SubType>
@@ -108,6 +115,9 @@
     <Compile Include="src\SystemUsageManager.cs" />
     <EmbeddedResource Include="ChildDashboard.resx">
       <DependentUpon>ChildDashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AlertDialog.resx">
+      <DependentUpon>AlertDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DashBoard.resx">
       <DependentUpon>DashBoard.cs</DependentUpon>
